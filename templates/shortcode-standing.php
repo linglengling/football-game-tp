@@ -22,7 +22,7 @@ global $wpdb;
 $original_prefix = $wpdb->prefix;
 
 // Change the prefix
-$wpdb->prefix = 'wp_2_';
+$wpdb->prefix = get_option('wm_prefix');;
 $wpdb->set_prefix($wpdb->prefix);
 
 // Check for required data
@@ -167,8 +167,8 @@ if ( $data->partial ) {
 			<div class="anwp-grid-table__td standing-table__club anwp-overflow-hidden <?php echo esc_attr( $club_classes ); ?>">
 				<?php if ( $club_logo ) : ?>
 					<img loading="lazy" width="25" height="25" class="anwp-object-contain mr-2 anwp-w-25 anwp-h-25"
-						src="<?php echo esc_url( $club_logo ); ?>"
-						alt="<?php echo esc_attr( $club_title ); ?>">
+					src="<?php echo esc_url( $club_logo ); ?>"
+					alt="<?php echo esc_attr( $club_title ); ?>">
 				<?php endif; ?>
 
 				<div class="d-flex flex-column">
@@ -206,49 +206,49 @@ if ( $data->partial ) {
 							?>
 							<div class="standing-table__cell-form anwp-leading-1-25 anwp-opacity-80 anwp-text-white anwp-text-center <?php echo esc_attr( $class ); ?>">
 								<?php if ( ! empty( $series[ $ii ] ) && ! empty( $series_map[ strtolower( $series[ $ii ] ) ] ) ) : ?>
-									<?php echo esc_html( mb_strtoupper( $series_map[ strtolower( $series[ $ii ] ) ] ) ); ?>
-								<?php endif; ?>
-							</div>
-							<?php
-						endfor;
-					endif;
-					?>
-				</div>
-			</div>
-
-			<?php foreach ( $columns_order as $col ) : ?>
-				<?php $classes = in_array( $col, [ 'won', 'drawn', 'lost', 'gf', 'ga' ], true ) ? 'anwp-grid-table__sm-none' : ''; ?>
-				<div class="anwp-grid-table__td justify-content-center standing-table__cell-number standing-table__<?php echo esc_attr( $col ); ?> <?php echo esc_attr( $classes ); ?> <?php echo esc_attr( $club_classes ); ?>">
-					<?php echo esc_html( $row->{$col} ); ?>
-				</div>
-			<?php endforeach; ?>
-		<?php endforeach; ?>
-	</div>
-
-	<?php if ( $table_notes ) : ?>
-		<div class="standing-table__notes mt-2 anwp-text-xs">
-			<?php echo wp_kses_post( anwp_football_leagues()->standing->prepare_table_notes( $table_notes, $table_colors ) ); ?>
-		</div>
-	<?php endif; ?>
-
-	<?php if ( ! empty( $data->bottom_link ) ) : ?>
-		<div class="standing-table__competition-link mt-2 anwp-text-xs">
-			<?php
-			if ( 'competition' === $data->bottom_link ) :
-				$link_competition_id = anwp_football_leagues()->competition->get_main_competition_id( $competition_id );
+								<?php echo esc_html( mb_strtoupper( $series_map[ strtolower( $series[ $ii ] ) ] ) ); ?>
+							<?php endif; ?>
+						</div>
+						<?php
+					endfor;
+				endif;
 				?>
-				<a href="<?php echo esc_url( get_permalink( $link_competition_id ) ); ?>"><?php echo esc_html( $data->link_text ? : get_post( $link_competition_id )->post_title ); ?></a>
-			<?php elseif ( 'standing' === $data->bottom_link ) : ?>
-				<a href="<?php echo esc_url( get_permalink( $standing_id ) ); ?>"><?php echo esc_html( $data->link_text ? : get_the_title( $standing_id ) ); ?></a>
-			<?php endif; ?>
+			</div>
 		</div>
-	<?php endif; ?>
+
+		<?php foreach ( $columns_order as $col ) : ?>
+			<?php $classes = in_array( $col, [ 'won', 'drawn', 'lost', 'gf', 'ga' ], true ) ? 'anwp-grid-table__sm-none' : ''; ?>
+			<div class="anwp-grid-table__td justify-content-center standing-table__cell-number standing-table__<?php echo esc_attr( $col ); ?> <?php echo esc_attr( $classes ); ?> <?php echo esc_attr( $club_classes ); ?>">
+				<?php echo esc_html( $row->{$col} ); ?>
+			</div>
+		<?php endforeach; ?>
+	<?php endforeach; ?>
+</div>
+
+<?php if ( $table_notes ) : ?>
+	<div class="standing-table__notes mt-2 anwp-text-xs">
+		<?php echo wp_kses_post( anwp_football_leagues()->standing->prepare_table_notes( $table_notes, $table_colors ) ); ?>
+	</div>
+<?php endif; ?>
+
+<?php if ( ! empty( $data->bottom_link ) ) : ?>
+	<div class="standing-table__competition-link mt-2 anwp-text-xs">
+		<?php
+		if ( 'competition' === $data->bottom_link ) :
+			$link_competition_id = anwp_football_leagues()->competition->get_main_competition_id( $competition_id );
+			?>
+			<a href="<?php echo esc_url( get_permalink( $link_competition_id ) ); ?>"><?php echo esc_html( $data->link_text ? : get_post( $link_competition_id )->post_title ); ?></a>
+		<?php elseif ( 'standing' === $data->bottom_link ) : ?>
+			<a href="<?php echo esc_url( get_permalink( $standing_id ) ); ?>"><?php echo esc_html( $data->link_text ? : get_the_title( $standing_id ) ); ?></a>
+		<?php endif; ?>
+	</div>
+<?php endif; ?>
 </div>
 
 <?php
 
     // Reset the prefix back to original after your custom code
-    $wpdb->prefix = $original_prefix;
-    $wpdb->set_prefix($wpdb->prefix);
+$wpdb->prefix = $original_prefix;
+$wpdb->set_prefix($wpdb->prefix);
 
 ?>

@@ -19,12 +19,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $wpdb;
 
     // Store the original prefix
-    $original_prefix = $wpdb->prefix;
+$original_prefix = $wpdb->prefix;
 
     // Change the prefix
-    $wpdb->prefix = 'wp_2_';
-    $wpdb->set_prefix($wpdb->prefix);
+$wpdb->prefix = get_option('wm_prefix');
+$wpdb->set_prefix($wpdb->prefix);
 echo anwp_football_leagues()->template->widget_loader( 'next-match', (array) $data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
     // Reset the prefix back to original after your custom code
-    $wpdb->prefix = $original_prefix;
-    $wpdb->set_prefix($wpdb->prefix);
+$wpdb->prefix = $original_prefix;
+$wpdb->set_prefix($wpdb->prefix);

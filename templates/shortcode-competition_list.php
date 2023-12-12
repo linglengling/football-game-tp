@@ -22,7 +22,7 @@ global $wpdb;
 $original_prefix = $wpdb->prefix;
 
 // Change the prefix
-$wpdb->prefix = 'wp_2_';
+$wpdb->prefix = get_option('wm_prefix');
 $wpdb->set_prefix($wpdb->prefix);
 $data = (object) wp_parse_args(
 	$data,
@@ -83,34 +83,34 @@ $country_classes      = $is_country_collapsed ? 'anwp-cursor-pointer competition
 					data-anwp-country="<?php echo esc_html( $competition['country'] ); ?>">
 
 					<?php if ( anwp_football_leagues()->helper->string_to_bool( $data->show_logo ) ) : ?>
-						<div class="anwp-w-30 anwp-flex-none">
-							<?php if ( $competition['logo'] ) : ?>
-								<img loading="lazy" width="25" height="20" src="<?php echo esc_url( $competition['logo'] ); ?>" alt="competition logo" class="anwp-object-contain m-0 anwp-w-25 anwp-h-20">
-							<?php endif; ?>
-						</div>
-					<?php endif; ?>
-
-					<div class="competition-list__competition-name flex-grow-1">
-						<?php echo esc_html( in_array( $data->display, [ 'league', 'league_season' ], true ) ? $competition['league'] : $competition['title'] ); ?>
+					<div class="anwp-w-30 anwp-flex-none">
+						<?php if ( $competition['logo'] ) : ?>
+							<img loading="lazy" width="25" height="20" src="<?php echo esc_url( $competition['logo'] ); ?>" alt="competition logo" class="anwp-object-contain m-0 anwp-w-25 anwp-h-20">
+						<?php endif; ?>
 					</div>
+				<?php endif; ?>
 
-					<?php if ( 'league_season' === $data->display ) : ?>
-						<div class="competition-list__season-name ml-2 anwp-text-nowrap">
-							<?php echo esc_html( $competition['season'] ); ?>
-						</div>
-					<?php endif; ?>
-
-					<a href="<?php echo esc_url( $competition['link'] ); ?>" class="anwp-link-cover anwp-link-without-effects"></a>
+				<div class="competition-list__competition-name flex-grow-1">
+					<?php echo esc_html( in_array( $data->display, [ 'league', 'league_season' ], true ) ? $competition['league'] : $competition['title'] ); ?>
 				</div>
-			<?php endforeach; ?>
+
+				<?php if ( 'league_season' === $data->display ) : ?>
+					<div class="competition-list__season-name ml-2 anwp-text-nowrap">
+						<?php echo esc_html( $competition['season'] ); ?>
+					</div>
+				<?php endif; ?>
+
+				<a href="<?php echo esc_url( $competition['link'] ); ?>" class="anwp-link-cover anwp-link-without-effects"></a>
+			</div>
 		<?php endforeach; ?>
-	</div>
+	<?php endforeach; ?>
+</div>
 </div>
 
 <?php
 
     // Reset the prefix back to original after your custom code
-    $wpdb->prefix = $original_prefix;
-    $wpdb->set_prefix($wpdb->prefix);
+$wpdb->prefix = $original_prefix;
+$wpdb->set_prefix($wpdb->prefix);
 
 ?>

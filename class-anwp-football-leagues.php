@@ -434,6 +434,9 @@ final class AnWP_Football_Leagues {
 		add_action( 'admin_menu', [ $this, 'register_menus' ], 5 );
 		add_action( 'admin_menu', [ $this, 'register_alt_menus' ], 5 );
 
+		add_action( 'wp_ajax_wm_setting_action', array($this,'wm_setting_action') );
+		add_action( 'wp_ajax_nopriv_wm_setting_action', array($this,'wm_setting_action') );
+
 		/**
 		 * Enqueue admin scripts
 		 *
@@ -614,12 +617,12 @@ final class AnWP_Football_Leagues {
 			case 'anwp_player':
 			case 'anwp_referee':
 			case 'anwp_staff':
-				$thumbnail_id = get_post_meta( $object_id, '_anwpfl_photo_id', true );
-				break;
+			$thumbnail_id = get_post_meta( $object_id, '_anwpfl_photo_id', true );
+			break;
 
 			case 'anwp_club':
-				$thumbnail_id = get_post_meta( $object_id, '_anwpfl_logo_id', true );
-				break;
+			$thumbnail_id = get_post_meta( $object_id, '_anwpfl_logo_id', true );
+			break;
 		}
 
 		if ( empty( $thumbnail_id ) ) {
@@ -800,7 +803,7 @@ final class AnWP_Football_Leagues {
 	 * @since 0.3.0 (2018-01-30)
 	 */
 	public function update_db() {
-             return true;
+		return true;
 //		global $wpdb;
 //
 //		$charset_collate = '';
@@ -985,11 +988,11 @@ final class AnWP_Football_Leagues {
 			<?php if ( 'text' === $field->type() ) : ?>
 
 				<input
-					id="<?php echo esc_attr( $id ); ?>"
-					class="form-control"
-					type="text"
-					name="<?php echo esc_attr( $name ); ?>"
-					value="<?php echo esc_attr( $value ); ?>"/>
+				id="<?php echo esc_attr( $id ); ?>"
+				class="form-control"
+				type="text"
+				name="<?php echo esc_attr( $name ); ?>"
+				value="<?php echo esc_attr( $value ); ?>"/>
 
 			<?php else : ?>
 
@@ -1005,6 +1008,103 @@ final class AnWP_Football_Leagues {
 		<?php
 
 		$field->peform_param_callback( 'after_row' );
+	}
+
+	public function render_setting_page(){ ?>
+
+
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 offset-md-2">
+					<h1 class="text-center text-primary">Setting Database Football</h1>
+					<form>
+						<div class="mb-3">
+							<label>Prefix</label>
+							<input type="text" name="wm_prefix" class="form-control" required value="<?php echo get_option('wm_prefix'); ?>">
+						</div>
+
+						<div class="mb-3">
+							<label>Short URL</label>
+							<input type="text" name="wm_short_url" class="form-control" required value="<?php echo get_option('wm_short_url'); ?>">
+						</div>
+						<span class="message-response" style="color:green;font-weight: 700;display: block;margin-bottom: 10px;"></span>
+						<button type="submit" class="btn btn-success save-btn">Save</button>
+					</form>
+					<br />
+					
+				</div>
+			</div>
+
+		</div>
+
+		<script type="text/javascript">
+
+			(function($){
+				$(document).ready(function(){					
+
+					$("form").submit(function (e) {
+						e.preventDefault();
+
+						$('.message-response').html('');
+						
+						var wm_prefix = $("input[name='wm_prefix']").val();
+						var wm_short_url = $("input[name='wm_short_url']").val();
+
+						var ajaxscript = { ajax_url : '<?php echo admin_url( 'admin-ajax.php' ); ?>' }
+
+						$.ajax({
+							url: ajaxscript.ajax_url,
+							type: 'POST',
+							dataType: 'json',
+							async : false,
+							data:{
+								action:"wm_setting_action",
+								wm_prefix : wm_prefix,
+								wm_short_url : wm_short_url
+							},		                    
+							error: function (xhr, status) {
+								console.log(status);
+							},
+							beforeSend:function(){
+								
+							},
+							success: function (result) {
+								$('.message-response').html('Save Successful');
+							}
+						});
+					});
+					
+				});
+			})(jQuery);
+
+		</script>
+
+		<?php
+	}
+
+	public function wm_setting_action(){
+
+		$wm_short_url = $_POST['wm_short_url'];
+
+		if($wm_short_url){
+			update_option('wm_short_url',$wm_short_url);
+		}
+		$wm_prefix = $_POST['wm_prefix'];
+		if($wm_prefix){
+			update_option('wm_prefix',$wm_prefix);
+		}
+		
+		// generate the response
+		$response = json_encode( array( 'success' => true ) );
+
+	    // response output
+		header( "Content-Type: application/json" );
+		echo $response;
+
+	    // IMPORTANT: don't forget to "exit"
+		exit;
 	}
 
 	/**
@@ -1023,6 +1123,20 @@ final class AnWP_Football_Leagues {
 			self::SVG_BALL,
 			32
 		);
+
+		add_menu_page(
+			esc_html_x( 'Football Setting', 'admin page title', 'anwp-football-leagues' ),
+			esc_html_x( 'Football Setting', 'admin menu title', 'anwp-football-leagues' ),
+			'manage_options',
+			'anwp-football-leagues-setting',
+			[ $this, 'render_setting_page' ],
+			'dashicons-smiley',
+			32
+		);
+
+		// if ( is_admin() ) {
+
+		// }
 
 		/*
 		|--------------------------------------------------------------------------
@@ -1957,7 +2071,7 @@ final class AnWP_Football_Leagues {
 	public function __get( $field ) {
 		switch ( $field ) {
 			case 'version':
-				return self::VERSION;
+			return self::VERSION;
 			case 'basename':
 			case 'url':
 			case 'path':
@@ -1981,9 +2095,9 @@ final class AnWP_Football_Leagues {
 			case 'data':
 			case 'customizer':
 			case 'blocks':
-				return $this->$field;
+			return $this->$field;
 			default:
-				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
+			throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
 		}
 	}
 

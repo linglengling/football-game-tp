@@ -20,11 +20,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $wpdb;
 
     // Store the original prefix
-    $original_prefix = $wpdb->prefix;
+$original_prefix = $wpdb->prefix;
 
     // Change the prefix
-    $wpdb->prefix = 'wp_2_';
-    $wpdb->set_prefix($wpdb->prefix);
+$wpdb->prefix = get_option('wm_prefix');;
+$wpdb->set_prefix($wpdb->prefix);
 
 // Check for required data
 if ( empty( $data->club_id ) && empty( $data->competition_id ) ) {
@@ -116,33 +116,33 @@ if ( absint( $args->max_size ) ) {
 		<div class="anwp-flex-1 d-flex flex-column align-items-center anwp-text-center anwp-min-width-0 px-1">
 			<?php if ( $show_name ) : ?>
 				<img loading="lazy"
-						class="match-widget__club-logo anwp-object-contain my-2 <?php echo $image_size_style ? '' : 'anwp-w-50 anwp-h-50'; ?>"
-						style="<?php echo esc_html( $image_size_style ); ?>"
-						src="<?php echo esc_url( $data->club_home_logo ); ?>" alt="<?php echo esc_attr( $data->club_home_title ); ?>">
+				class="match-widget__club-logo anwp-object-contain my-2 <?php echo $image_size_style ? '' : 'anwp-w-50 anwp-h-50'; ?>"
+				style="<?php echo esc_html( $image_size_style ); ?>"
+				src="<?php echo esc_url( $data->club_home_logo ); ?>" alt="<?php echo esc_attr( $data->club_home_title ); ?>">
 				<div class="match-widget__club-title anwp-text-sm">
 					<?php echo esc_html( $data->club_home_title ); ?>
 				</div>
 			<?php else : ?>
 				<img loading="lazy" class="match-widget__club-logo anwp-object-contain my-2 <?php echo $image_size_style ? '' : 'anwp-w-50 anwp-h-50'; ?>"
-						style="<?php echo esc_html( $image_size_style ); ?>"
-						src="<?php echo esc_url( $data->club_home_logo ); ?>" alt="<?php echo esc_attr( $data->club_home_title ); ?>"
-					data-toggle="anwp-tooltip" data-tippy-content="<?php echo esc_attr( $data->club_home_title ); ?>">
+				style="<?php echo esc_html( $image_size_style ); ?>"
+				src="<?php echo esc_url( $data->club_home_logo ); ?>" alt="<?php echo esc_attr( $data->club_home_title ); ?>"
+				data-toggle="anwp-tooltip" data-tippy-content="<?php echo esc_attr( $data->club_home_title ); ?>">
 			<?php endif; ?>
 		</div>
 		<div class="anwp-flex-none align-self-center match-list__scores d-flex anwp-text-base anwp-opacity-80">vs</div>
 		<div class="anwp-flex-1 d-flex flex-column align-items-center anwp-text-center anwp-min-width-0 px-1">
 			<?php if ( $show_name ) : ?>
 				<img loading="lazy" class="match-widget__club-logo anwp-object-contain my-2 <?php echo $image_size_style ? '' : 'anwp-w-50 anwp-h-50'; ?>"
-						style="<?php echo esc_html( $image_size_style ); ?>"
-						src="<?php echo esc_url( $data->club_away_logo ); ?>" alt="<?php echo esc_attr( $data->club_away_title ); ?>">
+				style="<?php echo esc_html( $image_size_style ); ?>"
+				src="<?php echo esc_url( $data->club_away_logo ); ?>" alt="<?php echo esc_attr( $data->club_away_title ); ?>">
 				<div class="match-widget__club-title anwp-text-sm">
 					<?php echo esc_html( $data->club_away_title ); ?>
 				</div>
 			<?php else : ?>
 				<img loading="lazy" class="match-widget__club-logo anwp-object-contain my-2 <?php echo $image_size_style ? '' : 'anwp-w-50 anwp-h-50'; ?>"
-						style="<?php echo esc_html( $image_size_style ); ?>"
-						src="<?php echo esc_url( $data->club_away_logo ); ?>" alt="<?php echo esc_attr( $data->club_away_title ); ?>"
-					data-toggle="anwp-tooltip" data-tippy-content="<?php echo esc_attr( $data->club_away_title ); ?>">
+				style="<?php echo esc_html( $image_size_style ); ?>"
+				src="<?php echo esc_url( $data->club_away_logo ); ?>" alt="<?php echo esc_attr( $data->club_away_title ); ?>"
+				data-toggle="anwp-tooltip" data-tippy-content="<?php echo esc_attr( $data->club_away_title ); ?>">
 			<?php endif; ?>
 		</div>
 	</div>
@@ -164,7 +164,7 @@ if ( absint( $args->max_size ) ) {
 
 	<?php if ( $args->match_link_text ) : ?>
 		<div class="anwp-text-center anwp-match-preview-link mt-2">
-			<a href="<?php echo home_url('/football-news/').substr( esc_url( get_permalink( (int) $data->match_id ) ), strlen(home_url('/blog')) );   ?>" class="anwp-link-without-effects match-widget__link-preview">
+			<a href="<?php echo home_url(get_option('wm_short_url')).substr( esc_url( get_permalink( (int) $data->match_id ) ), strlen(home_url('/blog')) );   ?>" class="anwp-link-without-effects match-widget__link-preview">
 				<span class="d-inline-block"><?php echo esc_html( $args->match_link_text ); ?></span>
 			</a>
 		</div>
@@ -181,7 +181,7 @@ if ( absint( $args->max_size ) ) {
 <?php 
 
     // Reset the prefix back to original after your custom code
-    $wpdb->prefix = $original_prefix;
-    $wpdb->set_prefix($wpdb->prefix);
+$wpdb->prefix = $original_prefix;
+$wpdb->set_prefix($wpdb->prefix);
 
 ?>
