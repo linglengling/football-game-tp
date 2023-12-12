@@ -1,0 +1,56 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "anwp-fl/last-game",
+  "title": "Last Game",
+  "category": "anwp-fl",
+  "description": "Last Game",
+  "textdomain": "football-leagues",
+  "attributes": {
+    "club_id": {
+      "type": "string",
+      "default": ""
+    },
+    "competition_id": {
+      "type": "string",
+      "default": ""
+    },
+    "season_id": {
+      "type": "string",
+      "default": ""
+    },
+    "show_club_name": {
+      "type": "boolean",
+      "default": true
+    },
+    "match_link_text": {
+      "type": "string",
+      "default": ""
+    },
+    "exclude_ids": {
+      "type": "string",
+      "default": ""
+    },
+    "include_ids": {
+      "type": "string",
+      "default": ""
+    },
+    "max_size": {
+      "type": "string",
+      "default": ""
+    },
+    "transparent_bg": {
+      "type": "boolean",
+      "default": false
+    },
+    "offset": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "supports": {
+    "className": false,
+    "customClassName": true,
+    "html": false
+  }
+}

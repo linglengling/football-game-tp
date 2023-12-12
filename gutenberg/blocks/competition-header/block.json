@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "anwp-fl/competition-header",
+  "title": "Competition Header",
+  "category": "anwp-fl",
+  "description": "Competition Header",
+  "textdomain": "football-leagues",
+  "attributes": {
+    "competition_id": {
+      "type": "string"
+    },
+    "title_as_link": {
+      "type": "boolean",
+      "default": false
+    },
+    "season_selector": {
+      "type": "boolean",
+      "default": false
+    },
+    "transparent_bg": {
+      "type": "boolean",
+      "default": false
+    },
+    "title_field": {
+      "type": "string",
+      "default": ""
+    },
+    "title": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "supports": {
+    "className": false,
+    "customClassName": true,
+    "html": false
+  }
+}

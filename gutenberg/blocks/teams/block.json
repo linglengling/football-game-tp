@@ -1,0 +1,56 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "anwp-fl/teams",
+  "title": "Teams",
+  "category": "anwp-fl",
+  "description": "Teams",
+  "textdomain": "football-leagues",
+  "attributes": {
+    "competition_id": {
+      "type": "string",
+      "default": ""
+    },
+    "logo_size": {
+      "type": "string",
+      "default": ""
+    },
+    "layout": {
+      "type": "string",
+      "default": ""
+    },
+    "team_title": {
+      "type": "string",
+      "default": ""
+    },
+    "show_club_name": {
+      "type": "boolean",
+      "default": true
+    },
+    "exclude_ids": {
+      "type": "string",
+      "default": ""
+    },
+    "include_ids": {
+      "type": "string",
+      "default": ""
+    },
+    "multistage": {
+      "type": "boolean",
+      "default": true
+    },
+    "width": {
+      "type": "string",
+      "default": ""
+    },
+    "text_size": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "supports": {
+    "className": false,
+    "customClassName": true,
+    "html": false
+  }
+}
