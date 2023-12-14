@@ -213,7 +213,7 @@ if($slider !== 1) :
 				$game_data['competition_logo'] = $args->competition_logo;
 				$game_data['outcome_id']       = $args->outcome_id;
 
-				anwp_football_leagues()->load_partial( $game_data, 'match/match', 'simple' );
+				anwp_football_leagues()->load_partial( $game_data, 'match/match', 'slider' );
 
 			endforeach;
 			?>
