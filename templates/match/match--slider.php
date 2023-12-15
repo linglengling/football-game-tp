@@ -30,6 +30,7 @@ $data = (object) wp_parse_args(
 		'home_club'           => '',
 		'away_club'           => '',
 		'club_home_abbr'      => '',
+		'competition_id'      => '',
 		'club_away_abbr'      => '',
 		'club_home_logo'      => '',
 		'club_away_logo'      => '',
@@ -53,6 +54,9 @@ if ( '0000-00-00 00:00:00' === $data->kickoff || ! $data->kickoff || in_array( $
 
 $kickoff_diff = ( date_i18n( 'U', get_date_from_gmt( $data->kickoff, 'U' ) ) - date_i18n( 'U' ) ) > 0 ? date_i18n( 'U', get_date_from_gmt( $data->kickoff, 'U' ) ) - date_i18n( 'U' ) : 0;
 
+$translate = new WM_Translator();
+
+
 ?>
 
 
@@ -65,14 +69,52 @@ $kickoff_diff = ( date_i18n( 'U', get_date_from_gmt( $data->kickoff, 'U' ) ) - d
 
 	<?php if ( $data->show_match_datetime && '0000-00-00 00:00:00' !== $data->kickoff ) : ?>
 		<div class="match-list-item__kickoff match-simple__kickoff px-1 anwp-text-xs <?php echo $data->show_club_name ? 'd-flex justify-content-between mb-1' : 'anwp-text-center'; ?>">
-			<span class="match-simple__date match__date-formatted"><?php echo esc_html( $data->match_date ); ?></span>
+			<span class="match-simple__date match__date-formatted">
 
+				<?php if($translate->language == 'vi') : ?>
+					<?php
+					$dt = new DateTime($data->match_date);
+					$dt->setTimezone(new DateTimeZone('Asia/Ho_Chi_Minh'));
+					echo $dt->format('Y-m-d');
+					?>
+				<?php elseif('pt-br') : ?>
+					<?php
+					$dt = new DateTime($data->match_date);
+					$dt->setTimezone(new DateTimeZone('America/Sao_Paulo'));
+					echo $dt->format('Y-m-d');
+					?>
+				<?php else : ?>
+					<?php echo esc_html( $data->match_date ); ?>
+				<?php endif; ?>
+
+			</span>
+			<span class="competition_name"><?php echo get_the_title( $data->competition_id ) ?></span>
 			<?php if ( 'TBD' !== $data->special_status ) : ?>
 				<?php echo $data->show_club_name ? '' : '-'; ?>
-				<span class="match-simple__time match__time-formatted"><?php echo esc_html( $data->match_time ); ?></span>
+				<span class="match-simple__time match__time-formatted">
+					<?php //echo esc_html( $data->match_time ); ?>
+					<?php if($translate->language == 'vi') : ?>
+						<?php
+						$dt = new DateTime($data->match_time);
+						$dt->setTimezone(new DateTimeZone('Asia/Ho_Chi_Minh'));
+						echo $dt->format('H:i A');
+						?>
+					<?php elseif('pt-br') : ?>
+						<?php
+						$dt = new DateTime($data->match_time);
+						$dt->setTimezone(new DateTimeZone('America/Sao_Paulo'));
+						echo $dt->format('H:i A');
+						?>
+					<?php else : ?>
+						<?php echo esc_html( $data->match_time ); ?>
+					<?php endif; ?>
+
+				</span>
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>
+
+	
 
 	<div class="anwp-row anwp-no-gutters p-1">
 		<div class="anwp-col-6 d-flex align-items-center">
@@ -89,22 +131,26 @@ $kickoff_diff = ( date_i18n( 'U', get_date_from_gmt( $data->kickoff, 'U' ) ) - d
 
 			<?php if ( $data->show_club_name ) : ?>
 				<div class="match-simple__team flex-grow-1 anwp-text-center mx-2 anwp-text-xs">
-					<?php echo esc_html( anwp_football_leagues()->customizer->get_value( 'match_list', 'match_simple_team_name' ) ? $data->club_home_title : $data->club_home_abbr ); ?>
+					<?php echo $data->club_home_title; ?>
+					<?php //echo esc_html( anwp_football_leagues()->customizer->get_value( 'match_list', 'match_simple_team_name' ) ? $data->club_home_title : $data->club_home_abbr ); ?>
 				</div>
 			<?php endif; ?>
 
 			<div class="match-list-item__scores-home anwp-fl-game__scores-home match-list-item__scores match-simple__scores-number anwp-text-base mr-0 anwp-text-center ml-auto match-simple__scores-number-status-<?php echo (int) $data->finished; ?>">
-				<?php echo (int) $data->finished ? (int) $data->home_goals : '-'; ?>
+				<?php echo (int) $data->finished ? (int) $data->home_goals : '-:'; ?>
 			</div>
 		</div>
+
+
 		<div class="anwp-col-6 d-flex align-items-center">
 			<div class="match-list-item__scores-away anwp-fl-game__scores-away match-list-item__scores match-simple__scores-number anwp-text-base ml-1 anwp-text-center match-simple__scores-number-status-<?php echo (int) $data->finished; ?>">
-				<?php echo (int) $data->finished ? (int) $data->away_goals : '-'; ?>
+				<?php echo (int) $data->finished ? (int) $data->away_goals : ':-'; ?>
 			</div>
 
 			<?php if ( $data->show_club_name ) : ?>
 				<div class="match-simple__team flex-grow-1 anwp-text-center mx-2 anwp-text-xs">
-					<?php echo esc_html( anwp_football_leagues()->customizer->get_value( 'match_list', 'match_simple_team_name' ) ? $data->club_away_title : $data->club_away_abbr ); ?>
+					<?php echo $data->club_away_title; ?>
+					<?php //echo esc_html( anwp_football_leagues()->customizer->get_value( 'match_list', 'match_simple_team_name' ) ? $data->club_away_title : $data->club_away_abbr ); ?>
 				</div>
 			<?php endif; ?>
 
@@ -168,22 +214,34 @@ $kickoff_diff = ( date_i18n( 'U', get_date_from_gmt( $data->kickoff, 'U' ) ) - d
 			data-game-datetime="<?php echo esc_attr( $data->kickoff_c ); ?>">
 			<div class="d-flex justify-content-center anwp-fl-game-countdown__inner">
 				<div class="anwp-fl-game-countdown__item anwp-fl-game-countdown__days">
-					<div class="anwp-fl-game-countdown__label" style="<?php echo esc_html( $label_style ); ?>"><?php echo esc_html( AnWPFL_Text::get_value( 'data__flip_countdown__days', esc_html_x( 'days', 'flip countdown', 'anwp-football-leagues' ) ) ); ?></div>
+					<div class="anwp-fl-game-countdown__label" style="<?php echo esc_html( $label_style ); ?>">
+						<?php //echo esc_html( AnWPFL_Text::get_value( 'data__flip_countdown__days', esc_html_x( 'days', 'flip countdown', 'anwp-football-leagues' ) ) ); ?>
+						<?php echo $translate->translate('days') ?>
+					</div>
 					<div class="anwp-fl-game-countdown__value anwp-fl-game-countdown__value-days" style="<?php echo esc_html( $value_style ); ?>"></div>
 				</div>
 				<div class="anwp-fl-game-countdown__separator"></div>
 				<div class="anwp-fl-game-countdown__item anwp-fl-game-countdown__hours">
-					<div class="anwp-fl-game-countdown__label" style="<?php echo esc_html( $label_style ); ?>"><?php echo esc_html( AnWPFL_Text::get_value( 'data__flip_countdown__hours', esc_html_x( 'hours', 'flip countdown', 'anwp-football-leagues' ) ) ); ?></div>
+					<div class="anwp-fl-game-countdown__label" style="<?php echo esc_html( $label_style ); ?>">
+						<?php //echo esc_html( AnWPFL_Text::get_value( 'data__flip_countdown__hours', esc_html_x( 'hours', 'flip countdown', 'anwp-football-leagues' ) ) ); ?>
+						<?php echo $translate->translate('hours') ?>						
+					</div>
 					<div class="anwp-fl-game-countdown__value anwp-fl-game-countdown__value-hours" style="<?php echo esc_html( $value_style ); ?>"></div>
 				</div>
 				<div class="anwp-fl-game-countdown__separator"></div>
 				<div class="anwp-fl-game-countdown__item anwp-fl-game-countdown__minutes">
-					<div class="anwp-fl-game-countdown__label" style="<?php echo esc_html( $label_style ); ?>"><?php echo esc_html( AnWPFL_Text::get_value( 'data__flip_countdown__minutes', esc_html_x( 'minutes', 'flip countdown', 'anwp-football-leagues' ) ) ); ?></div>
+					<div class="anwp-fl-game-countdown__label" style="<?php echo esc_html( $label_style ); ?>">
+						<?php //echo esc_html( AnWPFL_Text::get_value( 'data__flip_countdown__minutes', esc_html_x( 'minutes', 'flip countdown', 'anwp-football-leagues' ) ) ); ?>
+						<?php echo $translate->translate('minutes') ?>
+					</div>
 					<div class="anwp-fl-game-countdown__value anwp-fl-game-countdown__value-minutes" style="<?php echo esc_html( $value_style ); ?>"></div>
 				</div>
 				<div class="anwp-fl-game-countdown__separator"></div>
 				<div class="anwp-fl-game-countdown__item anwp-fl-game-countdown__seconds">
-					<div class="anwp-fl-game-countdown__label" style="<?php echo esc_html( $label_style ); ?>"><?php echo esc_html( AnWPFL_Text::get_value( 'data__flip_countdown__seconds', esc_html_x( 'seconds', 'flip countdown', 'anwp-football-leagues' ) ) ); ?></div>
+					<div class="anwp-fl-game-countdown__label" style="<?php echo esc_html( $label_style ); ?>">
+						<?php //echo esc_html( AnWPFL_Text::get_value( 'data__flip_countdown__seconds', esc_html_x( 'seconds', 'flip countdown', 'anwp-football-leagues' ) ) ); ?>
+						<?php echo $translate->translate('seconds') ?>
+					</div>
 					<div class="anwp-fl-game-countdown__value anwp-fl-game-countdown__value-seconds" style="<?php echo esc_html( $value_style ); ?>"></div>
 				</div>
 			</div>

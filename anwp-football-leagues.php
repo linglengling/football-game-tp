@@ -24,6 +24,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'ANWP_FL_VERSION', '0.15.2' );
 
+require_once plugin_dir_path( __FILE__ ) . 'wm_translate.php';
+
+
 // Check for required PHP version
 if ( version_compare( PHP_VERSION, '5.6', '<' ) ) {
 	add_action( 'admin_notices', 'anwpfl_requirements_not_met_notice' );
