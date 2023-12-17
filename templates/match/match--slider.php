@@ -57,6 +57,25 @@ $kickoff_diff = ( date_i18n( 'U', get_date_from_gmt( $data->kickoff, 'U' ) ) - d
 $translate = new WM_Translator();
 
 
+$wm_date = new DateTime();
+$wm_date->setTimestamp(strtotime($data->kickoff_orig));
+
+if($translate->language == 'vi'){
+	$wm_date->setTimezone(new DateTimeZone('Asia/Ho_Chi_Minh'));
+	$match_date = $wm_date->format('Y-m-d');
+	$match_time = $wm_date->format('H:i A');
+	$countdown = $wm_date->format('c');
+}elseif($translate->language == 'pt-br'){
+	$wm_date->setTimezone(new DateTimeZone('America/Sao_Paulo'));
+	$match_date = $wm_date->format('Y-m-d');
+	$match_time = $wm_date->format('H:i A');
+	$countdown = $wm_date->format('c');
+}else{
+	$match_date = $data->match_date;
+	$match_time = $data->match_time;
+	$countdown = $wm_date->format('c');
+}
+
 ?>
 
 
@@ -70,47 +89,13 @@ $translate = new WM_Translator();
 	<?php if ( $data->show_match_datetime && '0000-00-00 00:00:00' !== $data->kickoff ) : ?>
 		<div class="match-list-item__kickoff match-simple__kickoff px-1 anwp-text-xs <?php echo $data->show_club_name ? 'd-flex justify-content-between mb-1' : 'anwp-text-center'; ?>">
 			<span class="match-simple__date match__date-formatted">
-				<?php
-				$wm_date = new DateTime();
-				$wm_date->setTimestamp(strtotime($data->match_date));
-				?>
-				<?php if($translate->language == 'vi') : ?>
-					<?php					
-					$wm_date->setTimezone(new DateTimeZone('Asia/Ho_Chi_Minh'));
-					echo $wm_date->format('Y-m-d');
-					?>
-				<?php elseif($translate->language == 'pt-br') : ?>
-					<?php					
-					$wm_date->setTimezone(new DateTimeZone('America/Sao_Paulo'));
-					echo $wm_date->format('Y-m-d');
-					?>
-				<?php else : ?>
-					<?php echo esc_html( $data->match_date ); ?>
-				<?php endif; ?>
-
+				<?php echo $match_date; ?>
 			</span>
 			<span class="competition_name"><?php echo get_the_title( $data->competition_id ) ?></span>
 			<?php if ( 'TBD' !== $data->special_status ) : ?>
 				<?php echo $data->show_club_name ? '' : '-'; ?>
 				<span class="match-simple__time match__time-formatted">
-					<?php
-					$wm_time = new DateTime();
-					$wm_time->setTimestamp(strtotime($data->match_time));
-					?>
-					<?php if($translate->language == 'vi') : ?>
-						<?php
-						$wm_time->setTimezone(new DateTimeZone('Asia/Ho_Chi_Minh'));
-						echo $wm_time->format('H:i A');
-						?>
-					<?php elseif($translate->language == 'pt-br') : ?>
-						<?php
-						$wm_time->setTimezone(new DateTimeZone('America/Sao_Paulo'));
-						echo $wm_time->format('H:i A');
-						?>
-					<?php else : ?>
-						<?php echo esc_html( $data->match_time ); ?>
-					<?php endif; ?>
-
+					<?php echo $match_time; ?>
 				</span>
 			<?php endif; ?>
 		</div>
@@ -213,7 +198,7 @@ $translate = new WM_Translator();
 		}
 		?>
 		<div class="anwp-text-center <?php echo esc_attr( 'widget' === $data->context ? 'py-2' : 'py-3' ); ?> anwp-fl-game-countdown anwp-fl-game-countdown--<?php echo esc_attr( $data->context ); ?> d-none"
-			data-game-datetime="<?php echo esc_attr( $data->kickoff_c ); ?>">
+			data-game-datetime="<?php echo esc_attr( $countdown ); ?>">
 			<div class="d-flex justify-content-center anwp-fl-game-countdown__inner">
 				<div class="anwp-fl-game-countdown__item anwp-fl-game-countdown__days">
 					<div class="anwp-fl-game-countdown__label" style="<?php echo esc_html( $label_style ); ?>">
