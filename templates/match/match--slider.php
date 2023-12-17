@@ -70,18 +70,19 @@ $translate = new WM_Translator();
 	<?php if ( $data->show_match_datetime && '0000-00-00 00:00:00' !== $data->kickoff ) : ?>
 		<div class="match-list-item__kickoff match-simple__kickoff px-1 anwp-text-xs <?php echo $data->show_club_name ? 'd-flex justify-content-between mb-1' : 'anwp-text-center'; ?>">
 			<span class="match-simple__date match__date-formatted">
-
+				<?php
+				$wm_date = new DateTime();
+				$wm_date->setTimestamp(strtotime($data->match_date));
+				?>
 				<?php if($translate->language == 'vi') : ?>
-					<?php
-					$dt = new DateTime($data->match_date);
-					$dt->setTimezone(new DateTimeZone('Asia/Ho_Chi_Minh'));
-					echo $dt->format('Y-m-d');
+					<?php					
+					$wm_date->setTimezone(new DateTimeZone('Asia/Ho_Chi_Minh'));
+					echo $wm_date->format('Y-m-d');
 					?>
-				<?php elseif('pt-br') : ?>
-					<?php
-					$dt = new DateTime($data->match_date);
-					$dt->setTimezone(new DateTimeZone('America/Sao_Paulo'));
-					echo $dt->format('Y-m-d');
+				<?php elseif($translate->language == 'pt-br') : ?>
+					<?php					
+					$wm_date->setTimezone(new DateTimeZone('America/Sao_Paulo'));
+					echo $wm_date->format('Y-m-d');
 					?>
 				<?php else : ?>
 					<?php echo esc_html( $data->match_date ); ?>
@@ -92,18 +93,19 @@ $translate = new WM_Translator();
 			<?php if ( 'TBD' !== $data->special_status ) : ?>
 				<?php echo $data->show_club_name ? '' : '-'; ?>
 				<span class="match-simple__time match__time-formatted">
-					<?php //echo esc_html( $data->match_time ); ?>
+					<?php
+					$wm_time = new DateTime();
+					$wm_time->setTimestamp(strtotime($data->match_time));
+					?>
 					<?php if($translate->language == 'vi') : ?>
 						<?php
-						$dt = new DateTime($data->match_time);
-						$dt->setTimezone(new DateTimeZone('Asia/Ho_Chi_Minh'));
-						echo $dt->format('H:i A');
+						$wm_time->setTimezone(new DateTimeZone('Asia/Ho_Chi_Minh'));
+						echo $wm_time->format('H:i A');
 						?>
-					<?php elseif('pt-br') : ?>
+					<?php elseif($translate->language == 'pt-br') : ?>
 						<?php
-						$dt = new DateTime($data->match_time);
-						$dt->setTimezone(new DateTimeZone('America/Sao_Paulo'));
-						echo $dt->format('H:i A');
+						$wm_time->setTimezone(new DateTimeZone('America/Sao_Paulo'));
+						echo $wm_time->format('H:i A');
 						?>
 					<?php else : ?>
 						<?php echo esc_html( $data->match_time ); ?>
