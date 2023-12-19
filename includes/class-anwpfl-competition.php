@@ -54,36 +54,36 @@ class AnWPFL_Competition extends CPT_Core {
         // Register this cpt.
         parent::__construct(
                 [// array with Singular, Plural, and Registered name
-                    esc_html__('Competition', 'anwp-football-leagues'),
-                    esc_html__('Competitions', 'anwp-football-leagues'),
-                    'anwp_competition',
+                esc_html__('Competition', 'anwp-football-leagues'),
+                esc_html__('Competitions', 'anwp-football-leagues'),
+                'anwp_competition',
+            ],
+            [
+                'supports' => [
+                    'title',
+                    'comments',
                 ],
-                [
-                    'supports' => [
-                        'title',
-                        'comments',
-                    ],
-                    'show_in_menu' => true,
-                    'menu_position' => 33,
-                    'menu_icon' => $plugin::SVG_CUP,
-                    'show_in_rest' => true,
-                    'rest_base' => 'anwp_competitions',
-                    'exclude_from_search' => 'hide' === AnWPFL_Options::get_value('display_front_end_search_competition'),
-                    'rewrite' => ['slug' => $permalink_slug],
-                    'public' => true,
-                    'labels' => [
-                        'all_items' => esc_html__('All Competitions', 'anwp-football-leagues'),
-                        'add_new' => esc_html__('Add New Competition', 'anwp-football-leagues'),
-                        'add_new_item' => esc_html__('Add New Competition', 'anwp-football-leagues'),
-                        'edit_item' => esc_html__('Edit Competition', 'anwp-football-leagues'),
-                        'new_item' => esc_html__('New Competition', 'anwp-football-leagues'),
-                        'view_item' => esc_html__('View Competition', 'anwp-football-leagues'),
-                    ],
-                    'taxonomies' => [
-                        'anwp_league',
-                        'anwp_season',
-                    ],
-                ]
+                'show_in_menu' => true,
+                'menu_position' => 33,
+                'menu_icon' => $plugin::SVG_CUP,
+                'show_in_rest' => true,
+                'rest_base' => 'anwp_competitions',
+                'exclude_from_search' => 'hide' === AnWPFL_Options::get_value('display_front_end_search_competition'),
+                'rewrite' => ['slug' => $permalink_slug],
+                'public' => true,
+                'labels' => [
+                    'all_items' => esc_html__('All Competitions', 'anwp-football-leagues'),
+                    'add_new' => esc_html__('Add New Competition', 'anwp-football-leagues'),
+                    'add_new_item' => esc_html__('Add New Competition', 'anwp-football-leagues'),
+                    'edit_item' => esc_html__('Edit Competition', 'anwp-football-leagues'),
+                    'new_item' => esc_html__('New Competition', 'anwp-football-leagues'),
+                    'view_item' => esc_html__('View Competition', 'anwp-football-leagues'),
+                ],
+                'taxonomies' => [
+                    'anwp_league',
+                    'anwp_season',
+                ],
+            ]
         );
 
         // Prepare map data
@@ -152,15 +152,15 @@ class AnWPFL_Competition extends CPT_Core {
 
         // Render Custom Content below
         add_action(
-                'anwpfl/tmpl-competition/after_wrapper',
-                function ($competition_post_id) {
+            'anwpfl/tmpl-competition/after_wrapper',
+            function ($competition_post_id) {
 
-                    $content_below = get_post_meta($competition_post_id, '_anwpfl_custom_content_below', true);
+                $content_below = get_post_meta($competition_post_id, '_anwpfl_custom_content_below', true);
 
-                    if (trim($content_below)) {
-                        echo '<div class="anwp-b-wrap mt-4">' . do_shortcode($content_below) . '</div>';
-                    }
+                if (trim($content_below)) {
+                    echo '<div class="anwp-b-wrap mt-4">' . do_shortcode($content_below) . '</div>';
                 }
+            }
         );
 
         // Admin Table filters
@@ -230,10 +230,10 @@ class AnWPFL_Competition extends CPT_Core {
         }
 
         $cloned_id = wp_insert_post(
-                [
-                    'post_type' => 'anwp_competition',
-                    'post_status' => 'publish',
-                ]
+            [
+                'post_type' => 'anwp_competition',
+                'post_status' => 'publish',
+            ]
         );
 
         if ($cloned_id) {
@@ -286,9 +286,9 @@ class AnWPFL_Competition extends CPT_Core {
               | League
               |--------------------------------------------------------------------
              */
-            $league_id = wp_get_post_terms($competition_id, 'anwp_league', ['fields' => 'ids']);
+              $league_id = wp_get_post_terms($competition_id, 'anwp_league', ['fields' => 'ids']);
 
-            if (!empty($league_id) && !empty($league_id[0])) {
+              if (!empty($league_id) && !empty($league_id[0])) {
                 wp_set_object_terms($cloned_id, $league_id[0], 'anwp_league');
             }
 
@@ -297,21 +297,21 @@ class AnWPFL_Competition extends CPT_Core {
               | Season
               |--------------------------------------------------------------------
              */
-            wp_set_object_terms($cloned_id, $season_id, 'anwp_season');
+              wp_set_object_terms($cloned_id, $season_id, 'anwp_season');
 
             /*
               |--------------------------------------------------------------------
               | Generate Post Title
               |--------------------------------------------------------------------
              */
-            $cloned_post_title = get_term($league_id[0], 'anwp_league')->name . ' ' . get_term($season_id, 'anwp_season')->name;
+              $cloned_post_title = get_term($league_id[0], 'anwp_league')->name . ' ' . get_term($season_id, 'anwp_season')->name;
 
-            if ($cloned_post_title) {
+              if ($cloned_post_title) {
                 wp_update_post(
-                        [
-                            'ID' => $cloned_id,
-                            'post_title' => $cloned_post_title,
-                        ]
+                    [
+                        'ID' => $cloned_id,
+                        'post_title' => $cloned_post_title,
+                    ]
                 );
             }
 
@@ -323,7 +323,7 @@ class AnWPFL_Competition extends CPT_Core {
               |--------------------------------------------------------------------
              */
 
-            if ('main' === get_post_meta($competition_id, '_anwpfl_multistage', true)) {
+              if ('main' === get_post_meta($competition_id, '_anwpfl_multistage', true)) {
 
                 // Get all secondary stages
                 $stages = $this->get_secondary_competitions_list($competition_id);
@@ -335,10 +335,10 @@ class AnWPFL_Competition extends CPT_Core {
 
                 foreach ($stages_ids as $stage_id) {
                     $cloned_stage_id = wp_insert_post(
-                            [
-                                'post_type' => 'anwp_competition',
-                                'post_status' => 'stage_secondary',
-                            ]
+                        [
+                            'post_type' => 'anwp_competition',
+                            'post_status' => 'stage_secondary',
+                        ]
                     );
 
                     if ($cloned_stage_id) {
@@ -390,9 +390,9 @@ class AnWPFL_Competition extends CPT_Core {
                           | League
                           |--------------------------------------------------------------------
                          */
-                        $league_id = wp_get_post_terms($stage_id, 'anwp_league', ['fields' => 'ids']);
+                          $league_id = wp_get_post_terms($stage_id, 'anwp_league', ['fields' => 'ids']);
 
-                        if (!empty($league_id) && !empty($league_id[0])) {
+                          if (!empty($league_id) && !empty($league_id[0])) {
                             wp_set_object_terms($cloned_stage_id, $league_id[0], 'anwp_league');
                         }
 
@@ -401,21 +401,21 @@ class AnWPFL_Competition extends CPT_Core {
                           | Season
                           |--------------------------------------------------------------------
                          */
-                        wp_set_object_terms($cloned_stage_id, $season_id, 'anwp_season');
+                          wp_set_object_terms($cloned_stage_id, $season_id, 'anwp_season');
 
                         /*
                           |--------------------------------------------------------------------
                           | Generate Post Title
                           |--------------------------------------------------------------------
                          */
-                        $cloned_post_title = get_term($league_id[0], 'anwp_league')->name . ' ' . get_term($season_id, 'anwp_season')->name;
+                          $cloned_post_title = get_term($league_id[0], 'anwp_league')->name . ' ' . get_term($season_id, 'anwp_season')->name;
 
-                        if ($cloned_post_title) {
+                          if ($cloned_post_title) {
                             wp_update_post(
-                                    [
-                                        'ID' => $cloned_stage_id,
-                                        'post_title' => $cloned_post_title,
-                                    ]
+                                [
+                                    'ID' => $cloned_stage_id,
+                                    'post_title' => $cloned_post_title,
+                                ]
                             );
                         }
 
@@ -452,22 +452,22 @@ class AnWPFL_Competition extends CPT_Core {
                             <td>
                                 <select id="anwp-fl-clone-season-id">
                                     <?php foreach (anwp_football_leagues()->season->get_seasons_options() as $season_id => $season_title) : ?>
-                                        <option value="<?php echo esc_attr($season_id); ?>"><?php echo esc_html($season_title); ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="anwpfl-shortcode-modal__footer">
-                    <button id="anwp-fl-competition-clone-modaal__cancel" class="button"><?php echo esc_html__('Close', 'anwp-football-leagues'); ?></button>
-                    <button id="anwp-fl-competition-clone-modaal__clone" class="button button-primary"><?php echo esc_html__('Clone', 'anwp-football-leagues'); ?></button>
-                    <span class="spinner"></span>
-                </div>
+                                    <option value="<?php echo esc_attr($season_id); ?>"><?php echo esc_html($season_title); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
             </div>
-            <?php
-        }
+            <div class="anwpfl-shortcode-modal__footer">
+                <button id="anwp-fl-competition-clone-modaal__cancel" class="button"><?php echo esc_html__('Close', 'anwp-football-leagues'); ?></button>
+                <button id="anwp-fl-competition-clone-modaal__clone" class="button button-primary"><?php echo esc_html__('Clone', 'anwp-football-leagues'); ?></button>
+                <span class="spinner"></span>
+            </div>
+        </div>
+        <?php
     }
+}
 
     /**
      * Fires before the Filter button on the Posts and Pages list tables.
@@ -488,14 +488,14 @@ class AnWPFL_Competition extends CPT_Core {
               | Filter By League
               |--------------------------------------------------------------------
              */
-            $leagues = get_terms(
-                    [
-                        'taxonomy' => 'anwp_league',
-                        'hide_empty' => false,
-                    ]
+              $leagues = get_terms(
+                [
+                    'taxonomy' => 'anwp_league',
+                    'hide_empty' => false,
+                ]
             );
 
-            if (!is_wp_error($leagues) && !empty($leagues)) {
+              if (!is_wp_error($leagues) && !empty($leagues)) {
                 // phpcs:ignore WordPress.Security.NonceVerification
                 $current_league_filter = empty($_GET['_anwpfl_current_league']) ? '' : (int) $_GET['_anwpfl_current_league'];
                 ?>
@@ -516,14 +516,14 @@ class AnWPFL_Competition extends CPT_Core {
               | Filter By Season
               |--------------------------------------------------------------------
              */
-            $seasons = get_terms(
-                    [
-                        'taxonomy' => 'anwp_season',
-                        'hide_empty' => false,
-                    ]
+              $seasons = get_terms(
+                [
+                    'taxonomy' => 'anwp_season',
+                    'hide_empty' => false,
+                ]
             );
 
-            if (!is_wp_error($seasons) && !empty($seasons)) {
+              if (!is_wp_error($seasons) && !empty($seasons)) {
                 // phpcs:ignore WordPress.Security.NonceVerification
                 $current_season_filter = empty($_GET['_anwpfl_current_season']) ? '' : (int) $_GET['_anwpfl_current_season'];
                 ?>
@@ -569,9 +569,9 @@ class AnWPFL_Competition extends CPT_Core {
           |--------------------------------------------------------------------
          */
         // phpcs:ignore WordPress.Security.NonceVerification
-        $filter_by_season = empty($_GET['_anwpfl_current_season']) ? '' : intval($_GET['_anwpfl_current_season']);
+          $filter_by_season = empty($_GET['_anwpfl_current_season']) ? '' : intval($_GET['_anwpfl_current_season']);
 
-        if ($filter_by_season) {
+          if ($filter_by_season) {
             $tax_query[] = [
                 'taxonomy' => 'anwp_season',
                 'terms' => $filter_by_season,
@@ -584,9 +584,9 @@ class AnWPFL_Competition extends CPT_Core {
           |--------------------------------------------------------------------
          */
         // phpcs:ignore WordPress.Security.NonceVerification
-        $filter_by_league = empty($_GET['_anwpfl_current_league']) ? '' : intval($_GET['_anwpfl_current_league']);
+          $filter_by_league = empty($_GET['_anwpfl_current_league']) ? '' : intval($_GET['_anwpfl_current_league']);
 
-        if ($filter_by_league) {
+          if ($filter_by_league) {
             $tax_query[] = [
                 'taxonomy' => 'anwp_league',
                 'terms' => $filter_by_league,
@@ -598,12 +598,12 @@ class AnWPFL_Competition extends CPT_Core {
           | Join All values to main query
           |--------------------------------------------------------------------
          */
-        if (!empty($tax_query)) {
+          if (!empty($tax_query)) {
             $query->set(
-                    'tax_query',
-                    [
-                        array_merge(['relation' => 'and'], $tax_query),
-                    ]
+                'tax_query',
+                [
+                    array_merge(['relation' => 'and'], $tax_query),
+                ]
             );
         }
     }
@@ -682,31 +682,31 @@ class AnWPFL_Competition extends CPT_Core {
         $prefix = '_anwpfl_';
 
         $cmb_side = new_cmb2_box(
-                [
-                    'id' => 'anwp_competition_side',
-                    'title' => esc_html__('Big Logo', 'anwp-football-leagues'),
-                    'object_types' => ['anwp_competition'],
-                    'context' => 'side',
-                    'priority' => 'low',
-                    'classes' => 'anwp-b-wrap',
-                    'show_names' => false,
-                    'remove_box_wrap' => true,
-                ]
+            [
+                'id' => 'anwp_competition_side',
+                'title' => esc_html__('Big Logo', 'anwp-football-leagues'),
+                'object_types' => ['anwp_competition'],
+                'context' => 'side',
+                'priority' => 'low',
+                'classes' => 'anwp-b-wrap',
+                'show_names' => false,
+                'remove_box_wrap' => true,
+            ]
         );
 
         $cmb_side->add_field(
-                [
-                    'name' => esc_html__('Logo Big', 'anwp-football-leagues'),
-                    'id' => $prefix . 'logo_big',
-                    'type' => 'file',
-                    'query_args' => [
-                        'type' => 'image',
-                    ],
-                    'options' => [
-                        'url' => false,
-                    ],
-                    'preview_size' => 'large',
-                ]
+            [
+                'name' => esc_html__('Logo Big', 'anwp-football-leagues'),
+                'id' => $prefix . 'logo_big',
+                'type' => 'file',
+                'query_args' => [
+                    'type' => 'image',
+                ],
+                'options' => [
+                    'url' => false,
+                ],
+                'preview_size' => 'large',
+            ]
         );
 
         /*         * ***
@@ -714,15 +714,15 @@ class AnWPFL_Competition extends CPT_Core {
           | General Metabox
           |--------------------------------------------------------------------------
          * *** */
-        $cmb = new_cmb2_box(
-                [
-                    'id' => 'anwp_competition_cmb2_metabox',
-                    'title' => esc_html__('Display Options', 'anwp-football-leagues'),
-                    'object_types' => ['anwp_competition'],
-                    'priority' => 'low',
-                    'classes' => 'anwp-b-wrap',
-                    'show_names' => true,
-                ]
+          $cmb = new_cmb2_box(
+            [
+                'id' => 'anwp_competition_cmb2_metabox',
+                'title' => esc_html__('Display Options', 'anwp-football-leagues'),
+                'object_types' => ['anwp_competition'],
+                'priority' => 'low',
+                'classes' => 'anwp-b-wrap',
+                'show_names' => true,
+            ]
         );
 
         /*
@@ -730,31 +730,31 @@ class AnWPFL_Competition extends CPT_Core {
           | Display
           |--------------------------------------------------------------------------
          */
-        $cmb->add_field(
-                [
-                    'name' => esc_html__('Layout', 'anwp-football-leagues'),
-                    'id' => $prefix . 'tmpl_layout',
-                    'type' => 'select',
-                    'default' => '',
-                    'description' => '*' . esc_html__('Tabs - only for Multiple Stages or Rounds ', 'anwp-football-leagues'),
-                    'show_option_none' => false,
-                    'before_row' => '<div id="anwp-tabs-display-competition_metabox" class="anwp-metabox-tabs__content-item">',
-                    'options' => [
-                        '' => esc_html__('Default', 'anwp-football-leagues'),
-                        'tabs' => esc_html__('Tabs', 'anwp-football-leagues'),
-                    ],
-                ]
+          $cmb->add_field(
+            [
+                'name' => esc_html__('Layout', 'anwp-football-leagues'),
+                'id' => $prefix . 'tmpl_layout',
+                'type' => 'select',
+                'default' => '',
+                'description' => '*' . esc_html__('Tabs - only for Multiple Stages or Rounds ', 'anwp-football-leagues'),
+                'show_option_none' => false,
+                'before_row' => '<div id="anwp-tabs-display-competition_metabox" class="anwp-metabox-tabs__content-item">',
+                'options' => [
+                    '' => esc_html__('Default', 'anwp-football-leagues'),
+                    'tabs' => esc_html__('Tabs', 'anwp-football-leagues'),
+                ],
+            ]
         );
 
-        $cmb->add_field(
-                [
-                    'name' => esc_html__('Competition Order', 'anwp-football-leagues'),
-                    'id' => $prefix . 'competition_order',
-                    'label_cb' => [$this->plugin, 'cmb2_field_label'],
-                    'type' => 'text_small',
-                    'default' => 0,
-                    'after_row' => '</div>',
-                ]
+          $cmb->add_field(
+            [
+                'name' => esc_html__('Competition Order', 'anwp-football-leagues'),
+                'id' => $prefix . 'competition_order',
+                'label_cb' => [$this->plugin, 'cmb2_field_label'],
+                'type' => 'text_small',
+                'default' => 0,
+                'after_row' => '</div>',
+            ]
         );
 
         /*
@@ -762,13 +762,13 @@ class AnWPFL_Competition extends CPT_Core {
           | Bottom Content
           |--------------------------------------------------------------------------
          */
-        $cmb->add_field(
-                [
-                    'name' => esc_html__('Content', 'anwp-football-leagues'),
-                    'id' => $prefix . 'custom_content_below',
-                    'type' => 'wysiwyg',
-                    'options' => [
-                        'wpautop' => true,
+          $cmb->add_field(
+            [
+                'name' => esc_html__('Content', 'anwp-football-leagues'),
+                'id' => $prefix . 'custom_content_below',
+                'type' => 'wysiwyg',
+                'options' => [
+                    'wpautop' => true,
                         'media_buttons' => true, // show insert/upload button(s)
                         'textarea_name' => 'anwp_custom_content_below',
                         'textarea_rows' => 5,
@@ -781,7 +781,7 @@ class AnWPFL_Competition extends CPT_Core {
                     'before_row' => '<div id="anwp-tabs-bottom_content-competition_metabox" class="anwp-metabox-tabs__content-item d-none">',
                     'after_row' => '</div>',
                 ]
-        );
+            );
 
         /**
          * Adds extra fields to the metabox.
@@ -814,21 +814,21 @@ class AnWPFL_Competition extends CPT_Core {
               | Prepare Terms Data Map
               |--------------------------------------------------------------------
              */
-            global $wpdb;
+              global $wpdb;
 
-            $term_data = $wpdb->get_results(
-                    "
-					SELECT t.term_id, t.name, tr.object_id, tt.taxonomy
-					FROM $wpdb->terms AS t
-					INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id
-					INNER JOIN $wpdb->term_relationships AS tr ON tr.term_taxonomy_id = tt.term_taxonomy_id
-					WHERE tt.taxonomy IN ('anwp_league', 'anwp_season')
-				"
+              $term_data = $wpdb->get_results(
+                "
+                SELECT t.term_id, t.name, tr.object_id, tt.taxonomy
+                FROM $wpdb->terms AS t
+                INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id
+                INNER JOIN $wpdb->term_relationships AS tr ON tr.term_taxonomy_id = tt.term_taxonomy_id
+                WHERE tt.taxonomy IN ('anwp_league', 'anwp_season')
+                "
             ); // phpcs:ignore WordPress.DB.PreparedSQL
 
-            $term_data_map = [];
+              $term_data_map = [];
 
-            if (!empty($term_data) && is_array($term_data)) {
+              if (!empty($term_data) && is_array($term_data)) {
                 foreach ($term_data as $term_object_data) {
                     if (!isset($term_data_map[$term_object_data->object_id])) {
                         $term_data_map[$term_object_data->object_id] = [];
@@ -843,29 +843,29 @@ class AnWPFL_Competition extends CPT_Core {
               | Competitions
               |--------------------------------------------------------------------
              */
-            $output_data = [];
-            $secondary_stages = [];
+              $output_data = [];
+              $secondary_stages = [];
 
-            $all_competitions = get_posts(
-                    [
-                        'numberposts' => - 1,
-                        'post_type' => 'anwp_competition',
-                        'suppress_filters' => false,
-                        'post_status' => ['publish', 'stage_secondary'],
-                        'orderby' => 'title',
-                        'order' => 'ASC',
-                        'meta_query' => [
-                            [
-                                'key' => '_anwpfl_multistage',
-                                'value' => ['main', 'secondary'],
-                                'compare' => 'IN',
-                            ],
+              $all_competitions = get_posts(
+                [
+                    'numberposts' => - 1,
+                    'post_type' => 'anwp_competition',
+                    'suppress_filters' => false,
+                    'post_status' => ['publish', 'stage_secondary'],
+                    'orderby' => 'title',
+                    'order' => 'ASC',
+                    'meta_query' => [
+                        [
+                            'key' => '_anwpfl_multistage',
+                            'value' => ['main', 'secondary'],
+                            'compare' => 'IN',
                         ],
-                    ]
+                    ],
+                ]
             );
 
-            /** @var WP_Post $competition */
-            foreach ($all_competitions as $competition) {
+              /** @var WP_Post $competition */
+              foreach ($all_competitions as $competition) {
 
                 $obj = (object) [];
                 $obj->id = $competition->ID;
@@ -883,7 +883,7 @@ class AnWPFL_Competition extends CPT_Core {
                   | Get Season and League data
                   |--------------------------------------------------------------------
                  */
-                if (!empty($term_data_map[$obj->id]) && is_array($term_data_map[$obj->id])) {
+                  if (!empty($term_data_map[$obj->id]) && is_array($term_data_map[$obj->id])) {
                     foreach ($term_data_map[$obj->id] as $obj_term) {
                         if ('anwp_league' === $obj_term->taxonomy) {
                             $obj->league_id = (int) $obj_term->term_id;
@@ -900,7 +900,7 @@ class AnWPFL_Competition extends CPT_Core {
                   | Prepare output
                   |--------------------------------------------------------------------
                  */
-                if ('stage_secondary' === $competition->post_status) {
+                  if ('stage_secondary' === $competition->post_status) {
                     $secondary_stages[get_post_meta($competition->ID, '_anwpfl_multistage_main', true)][] = $obj;
                 } else {
                     $obj->stages = [];
@@ -963,10 +963,10 @@ class AnWPFL_Competition extends CPT_Core {
 
         // Sort stages
         usort(
-                $stages,
-                function ($a, $b) {
-                    return strcmp($a['order'], $b['order']);
-                }
+            $stages,
+            function ($a, $b) {
+                return strcmp($a['order'], $b['order']);
+            }
         );
 
         return $stages;
@@ -991,33 +991,33 @@ class AnWPFL_Competition extends CPT_Core {
         // Get all matches
         if ($multistage) {
             $matches = $wpdb->get_results(
-                    $wpdb->prepare(
+                $wpdb->prepare(
                             // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-                            "
-					SELECT *
-					FROM {$wpdb->prefix}anwpfl_matches
-					WHERE competition_id = %d
-						OR main_stage_id = %d
-					ORDER BY match_week {$matchweeks_order}, kickoff ASC
-					",
+                    "
+                    SELECT *
+                    FROM {$wpdb->prefix}anwpfl_matches
+                    WHERE competition_id = %d
+                    OR main_stage_id = %d
+                    ORDER BY match_week {$matchweeks_order}, kickoff ASC
+                    ",
                             // phpcs:enable
-                            $competition_id,
-                            $competition_id
-                    )
+                    $competition_id,
+                    $competition_id
+                )
             );
         } else {
             $matches = $wpdb->get_results(
-                    $wpdb->prepare(
+                $wpdb->prepare(
                             // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-                            "
-					SELECT *
-					FROM {$wpdb->prefix}anwpfl_matches
-					WHERE competition_id = %d
-					ORDER BY match_week {$matchweeks_order}, kickoff ASC
-					",
+                    "
+                    SELECT *
+                    FROM {$wpdb->prefix}anwpfl_matches
+                    WHERE competition_id = %d
+                    ORDER BY match_week {$matchweeks_order}, kickoff ASC
+                    ",
                             // phpcs:enable
-                            $competition_id
-                    )
+                    $competition_id
+                )
             );
         }
 
@@ -1060,43 +1060,43 @@ class AnWPFL_Competition extends CPT_Core {
         global $wpdb;
 
         $options = (object) wp_parse_args(
-                        $options,
-                        [
-                            'competition_id' => '',
-                            'season_id' => '',
-                            'league_id' => '',
-                            'group_id' => '',
-                            'stadium_id' => '',
-                            'show_secondary' => '',
-                            'type' => '',
-                            'filter_values' => '',
-                            'filter_by' => '',
-                            'filter_by_clubs' => '',
-                            'filter_by_matchweeks' => '',
-                            'sort_by_date' => '',
-                            'sort_by_matchweek' => '',
-                            'limit' => '',
-                            'days_offset' => '',
-                            'days_offset_to' => '',
-                            'priority' => '',
-                            'date_from' => '',
-                            'date_to' => '',
-                            'exclude_ids' => '',
-                            'include_ids' => '',
-                            'group_by' => '',
-                            'home_club' => '',
-                            'away_club' => '',
-                            'kickoff_to' => '',
-                            'kickoff_from' => '',
-                            'offset' => '',
-                        ]
+            $options,
+            [
+                'competition_id' => '',
+                'season_id' => '',
+                'league_id' => '',
+                'group_id' => '',
+                'stadium_id' => '',
+                'show_secondary' => '',
+                'type' => '',
+                'filter_values' => '',
+                'filter_by' => '',
+                'filter_by_clubs' => '',
+                'filter_by_matchweeks' => '',
+                'sort_by_date' => '',
+                'sort_by_matchweek' => '',
+                'limit' => '',
+                'days_offset' => '',
+                'days_offset_to' => '',
+                'priority' => '',
+                'date_from' => '',
+                'date_to' => '',
+                'exclude_ids' => '',
+                'include_ids' => '',
+                'group_by' => '',
+                'home_club' => '',
+                'away_club' => '',
+                'kickoff_to' => '',
+                'kickoff_from' => '',
+                'offset' => '',
+            ]
         );
 
         $query = "
-		SELECT *
-		FROM {$wpdb->prefix}anwpfl_matches
-		WHERE 1=1
-		";
+        SELECT *
+        FROM {$wpdb->prefix}anwpfl_matches
+        WHERE 1=1
+        ";
 
         /*         * ==================
          * WHERE filter by competition
@@ -1367,7 +1367,7 @@ class AnWPFL_Competition extends CPT_Core {
           | Limit
           |--------------------------------------------------------------------
          */
-        if ('' !== $options->limit && $options->limit > 0) {
+          if ('' !== $options->limit && $options->limit > 0) {
             if (!empty($options->offset) && absint($options->offset)) {
                 $query .= $wpdb->prepare(' LIMIT %d,%d', $options->offset, $options->limit);
             } else {
@@ -1416,7 +1416,9 @@ class AnWPFL_Competition extends CPT_Core {
         foreach ($matches as $match_index => $match) {
             $customID = isset($matches_posts[$match->match_id]) ? $matches_posts[$match->match_id] : $match->match_id;
             $subURL = substr(esc_url(get_permalink($customID)), strlen(home_url('/blog')));
-            $matches[$match_index]->permalink = home_url('/') . get_option('wm_short_url') . $subURL;
+            $mainURL = home_url('/') . get_option('wm_short_url') . $subURL;
+            $url = preg_replace('/([^:])(\/{2,})/', '$1/', $mainURL);
+            $matches[$match_index]->permalink = $url;
         }
 
         return $matches;
@@ -1457,13 +1459,13 @@ class AnWPFL_Competition extends CPT_Core {
         }
 
         return wp_list_sort(
-                $matches,
-                [
-                    'competition_order' => 'ASC',
-                    'competition_title' => 'ASC',
-                    'competition_id' => 'ASC',
-                    'pre_sort_index' => 'ASC',
-                ]
+            $matches,
+            [
+                'competition_order' => 'ASC',
+                'competition_title' => 'ASC',
+                'competition_id' => 'ASC',
+                'pre_sort_index' => 'ASC',
+            ]
         );
     }
 
@@ -1526,15 +1528,15 @@ class AnWPFL_Competition extends CPT_Core {
             $competitions_ids = array_values(array_unique($competitions_ids));
 
             $competitions = get_posts(
-                    [
-                        'ignore_sticky_posts' => true,
-                        'numberposts' => - 1,
-                        'order' => 'ASC',
-                        'post_status' => ['publish', 'stage_secondary'],
-                        'orderby' => 'ID',
-                        'post_type' => 'anwp_competition',
-                        'post__in' => $competitions_ids,
-                    ]
+                [
+                    'ignore_sticky_posts' => true,
+                    'numberposts' => - 1,
+                    'order' => 'ASC',
+                    'post_status' => ['publish', 'stage_secondary'],
+                    'orderby' => 'ID',
+                    'post_type' => 'anwp_competition',
+                    'post__in' => $competitions_ids,
+                ]
             );
         } else {
             $competitions = [get_post($competition_id)];
@@ -1546,15 +1548,15 @@ class AnWPFL_Competition extends CPT_Core {
         }
 
         usort(
-                $competitions,
-                function ($a, $b) use ($stage_order) {
+            $competitions,
+            function ($a, $b) use ($stage_order) {
 
-                    if (!isset($stage_order[$b->ID]) || !isset($stage_order[$a->ID])) {
-                        return 0;
-                    }
-
-                    return $stage_order[$b->ID] - $stage_order[$a->ID];
+                if (!isset($stage_order[$b->ID]) || !isset($stage_order[$a->ID])) {
+                    return 0;
                 }
+
+                return $stage_order[$b->ID] - $stage_order[$a->ID];
+            }
         );
 
         return $competitions;
@@ -1571,21 +1573,21 @@ class AnWPFL_Competition extends CPT_Core {
      */
     public function tmpl_get_competition_standings($competition_id, $group_id) {
         $standings = get_posts(
-                [
-                    'ignore_sticky_posts' => true,
-                    'numberposts' => 1,
-                    'post_type' => 'anwp_standing',
-                    'meta_query' => [
-                        [
-                            'key' => '_anwpfl_competition',
-                            'value' => $competition_id,
-                        ],
-                        [
-                            'key' => '_anwpfl_competition_group',
-                            'value' => $group_id,
-                        ],
+            [
+                'ignore_sticky_posts' => true,
+                'numberposts' => 1,
+                'post_type' => 'anwp_standing',
+                'meta_query' => [
+                    [
+                        'key' => '_anwpfl_competition',
+                        'value' => $competition_id,
                     ],
-                ]
+                    [
+                        'key' => '_anwpfl_competition_group',
+                        'value' => $group_id,
+                    ],
+                ],
+            ]
         );
 
         return $standings;
@@ -1716,31 +1718,31 @@ class AnWPFL_Competition extends CPT_Core {
             }
 
             wp_localize_script(
-                    'anwpfl_admin_vue',
-                    'anwpCompetition',
-                    [
-                        'groups' => $groups,
-                        'rounds' => $rounds,
-                        'type' => get_post_meta($post_id, '_anwpfl_type', true),
-                        'formatRobin' => get_post_meta($post_id, '_anwpfl_format_robin', true),
-                        'formatKnockout' => get_post_meta($post_id, '_anwpfl_format_knockout', true),
-                        'multistage' => get_post_meta($post_id, '_anwpfl_multistage', true),
-                        'multistageMain' => get_post_meta($post_id, '_anwpfl_multistage_main', true),
-                        'stageOrder' => get_post_meta($post_id, '_anwpfl_stage_order', true),
-                        'competitionOrder' => get_post_meta($post_id, '_anwpfl_competition_order', true),
-                        'stageTitle' => get_post_meta($post_id, '_anwpfl_stage_title', true),
-                        'competitionStatus' => get_post_meta($post_id, '_anwpfl_competition_status', true),
-                        'nextIdGroup' => get_post_meta($post_id, '_anwpfl_group_next_id', true),
-                        'nextIdRound' => get_post_meta($post_id, '_anwpfl_round_next_id', true),
-                        'logo_id' => get_post_meta($post_id, '_anwpfl_logo_id', true),
-                        'logo' => get_post_meta($post_id, '_anwpfl_logo', true),
-                        'leaguesList' => $this->plugin->league->get_leagues_list(),
-                        'clubsList' => $this->plugin->club->get_clubs_list(),
-                        'mainStages' => $this->plugin->competition->get_main_competition_options(),
-                        'countries' => $countries_options,
-                        'leagueId' => empty($league_arr) || empty($league_arr[0]) ? '' : intval($league_arr[0]),
-                        'seasonIds' => empty($season_arr) ? '' : implode(',', $season_arr),
-                    ]
+                'anwpfl_admin_vue',
+                'anwpCompetition',
+                [
+                    'groups' => $groups,
+                    'rounds' => $rounds,
+                    'type' => get_post_meta($post_id, '_anwpfl_type', true),
+                    'formatRobin' => get_post_meta($post_id, '_anwpfl_format_robin', true),
+                    'formatKnockout' => get_post_meta($post_id, '_anwpfl_format_knockout', true),
+                    'multistage' => get_post_meta($post_id, '_anwpfl_multistage', true),
+                    'multistageMain' => get_post_meta($post_id, '_anwpfl_multistage_main', true),
+                    'stageOrder' => get_post_meta($post_id, '_anwpfl_stage_order', true),
+                    'competitionOrder' => get_post_meta($post_id, '_anwpfl_competition_order', true),
+                    'stageTitle' => get_post_meta($post_id, '_anwpfl_stage_title', true),
+                    'competitionStatus' => get_post_meta($post_id, '_anwpfl_competition_status', true),
+                    'nextIdGroup' => get_post_meta($post_id, '_anwpfl_group_next_id', true),
+                    'nextIdRound' => get_post_meta($post_id, '_anwpfl_round_next_id', true),
+                    'logo_id' => get_post_meta($post_id, '_anwpfl_logo_id', true),
+                    'logo' => get_post_meta($post_id, '_anwpfl_logo', true),
+                    'leaguesList' => $this->plugin->league->get_leagues_list(),
+                    'clubsList' => $this->plugin->club->get_clubs_list(),
+                    'mainStages' => $this->plugin->competition->get_main_competition_options(),
+                    'countries' => $countries_options,
+                    'leagueId' => empty($league_arr) || empty($league_arr[0]) ? '' : intval($league_arr[0]),
+                    'seasonIds' => empty($season_arr) ? '' : implode(',', $season_arr),
+                ]
             );
         }
     }
@@ -1772,21 +1774,21 @@ class AnWPFL_Competition extends CPT_Core {
               | Prepare Terms Data Map
               |--------------------------------------------------------------------
              */
-            global $wpdb;
+              global $wpdb;
 
-            $term_data = $wpdb->get_results(
-                    "
-					SELECT t.term_id, t.name, tr.object_id, tt.taxonomy
-					FROM $wpdb->terms AS t
-					INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id
-					INNER JOIN $wpdb->term_relationships AS tr ON tr.term_taxonomy_id = tt.term_taxonomy_id
-					WHERE tt.taxonomy IN ('anwp_league', 'anwp_season')
-				"
+              $term_data = $wpdb->get_results(
+                "
+                SELECT t.term_id, t.name, tr.object_id, tt.taxonomy
+                FROM $wpdb->terms AS t
+                INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id
+                INNER JOIN $wpdb->term_relationships AS tr ON tr.term_taxonomy_id = tt.term_taxonomy_id
+                WHERE tt.taxonomy IN ('anwp_league', 'anwp_season')
+                "
             ); // phpcs:ignore WordPress.DB.PreparedSQL
 
-            $term_data_map = [];
+              $term_data_map = [];
 
-            if (!empty($term_data) && is_array($term_data)) {
+              if (!empty($term_data) && is_array($term_data)) {
                 foreach ($term_data as $term_object_data) {
                     if (!isset($term_data_map[$term_object_data->object_id])) {
                         $term_data_map[$term_object_data->object_id] = [];
@@ -1801,22 +1803,22 @@ class AnWPFL_Competition extends CPT_Core {
               | Competitions
               |--------------------------------------------------------------------
              */
-            $output_data = [];
+              $output_data = [];
 
-            $all_competitions = get_posts(
-                    [
-                        'numberposts' => - 1,
-                        'post_type' => 'anwp_competition',
-                        'suppress_filters' => false,
-                        'post_status' => ['publish', 'stage_secondary'],
-                        'orderby' => 'title',
-                        'order' => 'ASC',
-                        'update_post_term_cache' => false,
-                    ]
+              $all_competitions = get_posts(
+                [
+                    'numberposts' => - 1,
+                    'post_type' => 'anwp_competition',
+                    'suppress_filters' => false,
+                    'post_status' => ['publish', 'stage_secondary'],
+                    'orderby' => 'title',
+                    'order' => 'ASC',
+                    'update_post_term_cache' => false,
+                ]
             );
 
-            /** @var WP_Post $competition */
-            foreach ($all_competitions as $competition) {
+              /** @var WP_Post $competition */
+              foreach ($all_competitions as $competition) {
 
                 $obj = (object) [];
                 $obj->id = $competition->ID;
@@ -1846,7 +1848,7 @@ class AnWPFL_Competition extends CPT_Core {
                   | Get Season and League data
                   |--------------------------------------------------------------------
                  */
-                if (!empty($term_data_map[$obj->id]) && is_array($term_data_map[$obj->id])) {
+                  if (!empty($term_data_map[$obj->id]) && is_array($term_data_map[$obj->id])) {
                     foreach ($term_data_map[$obj->id] as $obj_term) {
                         if ('anwp_league' === $obj_term->taxonomy) {
                             $obj->league_id = (int) $obj_term->term_id;
@@ -1866,7 +1868,7 @@ class AnWPFL_Competition extends CPT_Core {
                   | Prepare output
                   |--------------------------------------------------------------------
                  */
-                if ('stage_secondary' === $competition->post_status) {
+                  if ('stage_secondary' === $competition->post_status) {
                     $obj->title_full = '- ' . $obj->title_full;
                     $obj->logo = get_post_meta($obj->multistage_main, '_anwpfl_logo', true);
                     $obj->competition_order = get_post_meta($obj->multistage_main, '_anwpfl_competition_order', true);
@@ -1883,9 +1885,9 @@ class AnWPFL_Competition extends CPT_Core {
               | Reorder
               |--------------------------------------------------------------------
              */
-            $clone_data = $output_data;
+              $clone_data = $output_data;
 
-            foreach ($clone_data as $main_stage_competition) {
+              foreach ($clone_data as $main_stage_competition) {
                 if (!empty($secondary_stages[$main_stage_competition->id])) {
                     $stages = $secondary_stages[$main_stage_competition->id];
                     $stages = wp_list_sort($stages, 'stage_order');
@@ -1900,7 +1902,7 @@ class AnWPFL_Competition extends CPT_Core {
               | Save transient
               |--------------------------------------------------------------------
              */
-            if (!empty($output_data)) {
+              if (!empty($output_data)) {
                 anwp_football_leagues()->cache->set($cache_key, $output_data);
             }
         }
@@ -1977,18 +1979,18 @@ class AnWPFL_Competition extends CPT_Core {
           | Get all saved Standing Tables
           |--------------------------------------------------------------------
          */
-        global $wpdb;
+          global $wpdb;
 
-        $query = "
-		SELECT p.ID, pm2.meta_value group_id, pm1.meta_value competition_id
-		FROM $wpdb->posts p
-		LEFT JOIN $wpdb->postmeta pm1 ON ( pm1.post_id = p.ID AND pm1.meta_key = '_anwpfl_competition' )
-		LEFT JOIN $wpdb->postmeta pm2 ON ( pm2.post_id = p.ID AND pm2.meta_key = '_anwpfl_competition_group' )
-		LEFT JOIN $wpdb->postmeta pm3 ON ( pm3.post_id = p.ID AND pm3.meta_key = '_anwpfl_fixed' )
-		WHERE p.post_type = 'anwp_standing' AND p.post_status = 'publish' AND pm3.meta_value = 'true' AND pm1.meta_value IS NOT NULL AND pm1.meta_value != '' AND pm2.meta_value IS NOT NULL AND pm2.meta_value != ''
-		";
+          $query = "
+          SELECT p.ID, pm2.meta_value group_id, pm1.meta_value competition_id
+          FROM $wpdb->posts p
+          LEFT JOIN $wpdb->postmeta pm1 ON ( pm1.post_id = p.ID AND pm1.meta_key = '_anwpfl_competition' )
+          LEFT JOIN $wpdb->postmeta pm2 ON ( pm2.post_id = p.ID AND pm2.meta_key = '_anwpfl_competition_group' )
+          LEFT JOIN $wpdb->postmeta pm3 ON ( pm3.post_id = p.ID AND pm3.meta_key = '_anwpfl_fixed' )
+          WHERE p.post_type = 'anwp_standing' AND p.post_status = 'publish' AND pm3.meta_value = 'true' AND pm1.meta_value IS NOT NULL AND pm1.meta_value != '' AND pm2.meta_value IS NOT NULL AND pm2.meta_value != ''
+          ";
 
-        $query .= ' GROUP BY p.ID';
+          $query .= ' GROUP BY p.ID';
 
         /*
           |--------------------------------------------------------------------
@@ -2050,16 +2052,16 @@ class AnWPFL_Competition extends CPT_Core {
               | Get all saved Standing Tables
               |--------------------------------------------------------------------
              */
-            $query = "
-				SELECT p.ID, p.post_title, pm1.meta_value competition_id
-				FROM $wpdb->posts p
-				LEFT JOIN $wpdb->postmeta pm1 ON ( pm1.post_id = p.ID AND pm1.meta_key = '_anwpfl_competition' )
-				LEFT JOIN $wpdb->postmeta pm2 ON ( pm2.post_id = p.ID AND pm2.meta_key = '_anwpfl_competition_group' )
-				LEFT JOIN $wpdb->postmeta pm3 ON ( pm3.post_id = p.ID AND pm3.meta_key = '_anwpfl_fixed' )
-				WHERE p.post_type = 'anwp_standing' AND p.post_status = 'publish' AND pm3.meta_value = 'true' AND pm1.meta_value IS NOT NULL AND pm1.meta_value != '' AND pm2.meta_value IS NOT NULL AND pm2.meta_value != ''
-			";
+              $query = "
+              SELECT p.ID, p.post_title, pm1.meta_value competition_id
+              FROM $wpdb->posts p
+              LEFT JOIN $wpdb->postmeta pm1 ON ( pm1.post_id = p.ID AND pm1.meta_key = '_anwpfl_competition' )
+              LEFT JOIN $wpdb->postmeta pm2 ON ( pm2.post_id = p.ID AND pm2.meta_key = '_anwpfl_competition_group' )
+              LEFT JOIN $wpdb->postmeta pm3 ON ( pm3.post_id = p.ID AND pm3.meta_key = '_anwpfl_fixed' )
+              WHERE p.post_type = 'anwp_standing' AND p.post_status = 'publish' AND pm3.meta_value = 'true' AND pm1.meta_value IS NOT NULL AND pm1.meta_value != '' AND pm2.meta_value IS NOT NULL AND pm2.meta_value != ''
+              ";
 
-            $query .= ' GROUP BY p.ID';
+              $query .= ' GROUP BY p.ID';
 
             /*
               |--------------------------------------------------------------------
@@ -2115,29 +2117,29 @@ class AnWPFL_Competition extends CPT_Core {
      */
     public function init_metaboxes() {
         add_action(
-                'add_meta_boxes',
-                function ($post_type) {
+            'add_meta_boxes',
+            function ($post_type) {
 
-                    if ('anwp_competition' === $post_type) {
-                        add_meta_box(
-                                'anwpfl_competition_stage',
-                                esc_html__('Competition Stages', 'anwp-football-leagues'),
-                                [$this, 'render_metabox'],
-                                $post_type,
-                                'normal',
-                                'high'
-                        );
+                if ('anwp_competition' === $post_type) {
+                    add_meta_box(
+                        'anwpfl_competition_stage',
+                        esc_html__('Competition Stages', 'anwp-football-leagues'),
+                        [$this, 'render_metabox'],
+                        $post_type,
+                        'normal',
+                        'high'
+                    );
 
-                        add_meta_box(
-                                'anwp_competition_tutorials_metabox',
-                                esc_html__('Related Tutorials', 'anwp-football-leagues'),
-                                [$this, 'render_tutorials_metabox'],
-                                $post_type,
-                                'side',
-                                'low'
-                        );
-                    }
+                    add_meta_box(
+                        'anwp_competition_tutorials_metabox',
+                        esc_html__('Related Tutorials', 'anwp-football-leagues'),
+                        [$this, 'render_tutorials_metabox'],
+                        $post_type,
+                        'side',
+                        'low'
+                    );
                 }
+            }
         );
     }
 
@@ -2159,7 +2161,7 @@ class AnWPFL_Competition extends CPT_Core {
             <div id="<?php echo esc_attr($app_id); ?>"></div>
             <div class="anwp-publish-click-proxy-wrapper mt-3">
                 <input class="button button-primary button-large mt-0 px-5" id="anwp-publish-click-proxy" type="button"
-                       value="<?php esc_html_e('Save', 'anwp-football-leagues'); ?>">
+                value="<?php esc_html_e('Save', 'anwp-football-leagues'); ?>">
                 <span class="spinner mt-2"></span>
             </div>
         </div>
@@ -2229,10 +2231,10 @@ class AnWPFL_Competition extends CPT_Core {
           | League
           |--------------------------------------------------------------------
          */
-        $league_id = '';
-        $league_obj = isset($_POST['_anwpfl_c_league']) ? json_decode(stripslashes($_POST['_anwpfl_c_league'])) : '';
+          $league_id = '';
+          $league_obj = isset($_POST['_anwpfl_c_league']) ? json_decode(stripslashes($_POST['_anwpfl_c_league'])) : '';
 
-        if ($league_obj && !empty($league_obj->id)) {
+          if ($league_obj && !empty($league_obj->id)) {
             $league_id = (int) $league_obj->id;
         }
 
@@ -2245,15 +2247,15 @@ class AnWPFL_Competition extends CPT_Core {
           | Seasons
           |--------------------------------------------------------------------
          */
-        $season_ids = [];
-        $season_json = isset($_POST['_anwpfl_c_season']) ? json_decode(stripslashes($_POST['_anwpfl_c_season'])) : [];
+          $season_ids = [];
+          $season_json = isset($_POST['_anwpfl_c_season']) ? json_decode(stripslashes($_POST['_anwpfl_c_season'])) : [];
 
-        if (!empty($season_json) && is_array($season_json)) {
+          if (!empty($season_json) && is_array($season_json)) {
             $season_ids = array_map(
-                    function ($s) {
-                        return $s->id ?: '';
-                    },
-                    $season_json
+                function ($s) {
+                    return $s->id ?: '';
+                },
+                $season_json
             );
         }
 
@@ -2310,10 +2312,10 @@ class AnWPFL_Competition extends CPT_Core {
             remove_action('save_post_anwp_competition', [$this, 'save_metabox']);
 
             wp_update_post(
-                    [
-                        'ID' => $post_id,
-                        'post_status' => 'stage_secondary',
-                    ]
+                [
+                    'ID' => $post_id,
+                    'post_status' => 'stage_secondary',
+                ]
             );
 
             add_action('save_post_anwp_competition', [$this, 'save_metabox']);
@@ -2335,10 +2337,10 @@ class AnWPFL_Competition extends CPT_Core {
                 remove_action('save_post_anwp_competition', [$this, 'save_metabox']);
 
                 wp_update_post(
-                        [
-                            'ID' => $post_id,
-                            'post_title' => $new_post_title,
-                        ]
+                    [
+                        'ID' => $post_id,
+                        'post_title' => $new_post_title,
+                    ]
                 );
 
                 add_action('save_post_anwp_competition', [$this, 'save_metabox']);
@@ -2432,115 +2434,126 @@ class AnWPFL_Competition extends CPT_Core {
         switch ($column) {
 
             case 'anwpfl_league_logo':
-                $logo = get_post_meta($post_id, '_anwpfl_logo', true);
+            $logo = get_post_meta($post_id, '_anwpfl_logo', true);
 
-                if ($logo) {
-                    printf('<img src="%s" class="anwp-admin-table-league-logo" alt="club logo" style="width: 30px; height: 30px; object-fit: contain;">', esc_url($logo));
-                }
-                break;
+            if ($logo) {
+                printf('<img src="%s" class="anwp-admin-table-league-logo" alt="club logo" style="width: 30px; height: 30px; object-fit: contain;">', esc_url($logo));
+            }
+            break;
 
             case 'anwpfl_multistage':
-                $multistage = get_post_meta($post_id, '_anwpfl_multistage', true);
-                $type = get_post_meta($post_id, '_anwpfl_type', true);
-                $group_title = 'round-robin' === $type ? __('Groups', 'anwp-football-leagues') : __('Ties', 'anwp-football-leagues');
+            $multistage = get_post_meta($post_id, '_anwpfl_multistage', true);
+            $type = get_post_meta($post_id, '_anwpfl_type', true);
+            $group_title = 'round-robin' === $type ? __('Groups', 'anwp-football-leagues') : __('Ties', 'anwp-football-leagues');
 
-                if ('' === $multistage) {
-                    echo sprintf('<span class="anwp-g-label-like">%s</span>', esc_html__('Single', 'anwp-football-leagues'));
-                    echo '<br>> ' . esc_html(empty($this->type_map[$type]) ? '' : $this->type_map[$type] );
+            if ('' === $multistage) {
+                echo sprintf('<span class="anwp-g-label-like">%s</span>', esc_html__('Single', 'anwp-football-leagues'));
+                echo '<br>> ' . esc_html(empty($this->type_map[$type]) ? '' : $this->type_map[$type] );
 
-                    if ('round-robin' === $type) {
-                        $subtype = get_post_meta($post_id, '_anwpfl_format_robin', true);
-                        echo ' | ' . esc_html(empty($this->format_robin_map[$subtype]) ? '' : $this->format_robin_map[$subtype] );
-                    } elseif ('knockout' === $type) {
-                        $subtype = get_post_meta($post_id, '_anwpfl_format_knockout', true);
-                        echo ' | ' . esc_html(empty($this->format_knockout_map[$subtype]) ? '' : $this->format_knockout_map[$subtype] );
-                    }
-
-                    // Get number of groups
-                    $groups = json_decode(get_post_meta($post_id, '_anwpfl_groups', true));
-
-                    if (is_array($groups)) {
-                        echo ' | ' . esc_html($group_title) . ':&nbsp;' . (int) count($groups);
-                    }
-
-                    echo ' | ' . esc_html__('ID', 'anwp-football-leagues') . ':&nbsp;' . (int) $post_id;
-                } else {
-
-                    echo sprintf('<span class="anwp-g-label-like">%s</span>', esc_html__('Multiple', 'anwp-football-leagues'));
-
-                    // Render main stage
-                    echo '<br><div class="anwp-g-stage-wrap">> <b>' . esc_html(get_post_meta($post_id, '_anwpfl_stage_title', true)) . '</b> | ';
-                    echo esc_html(empty($this->type_map[$type]) ? '' : $this->type_map[$type] );
-
-                    if ('round-robin' === $type) {
-                        $subtype = get_post_meta($post_id, '_anwpfl_format_robin', true);
-                        echo ' | ' . esc_html(empty($this->format_robin_map[$subtype]) ? '' : $this->format_robin_map[$subtype] );
-                    } elseif ('knockout' === $type) {
-                        $subtype = get_post_meta($post_id, '_anwpfl_format_knockout', true);
-                        echo ' | ' . esc_html(empty($this->format_knockout_map[$subtype]) ? '' : $this->format_knockout_map[$subtype] );
-                    }
-
-                    // Get number of groups
-                    $groups = json_decode(get_post_meta($post_id, '_anwpfl_groups', true));
-
-                    if (is_array($groups)) {
-                        echo ' | ' . esc_html($group_title) . ':&nbsp;' . (int) count($groups) . ' | ';
-                    }
-
-                    echo esc_html__('ID', 'anwp-football-leagues') . ':&nbsp;' . (int) $post_id . ' | ';
-
-                    echo sprintf('<a href="%s">%s</a>', esc_url(admin_url('post.php?post=' . $post_id . '&action=edit')), esc_html__('edit', 'anwp-football-leagues'));
-
-                    echo '</div>';
-                    // --- end of rendering main stage ---
-
-                    if ('main' === $multistage) {
-                        // Get all secondary stages
-                        $stages = $this->get_secondary_competitions_list($post_id);
-
-                        foreach ($stages as $stage) {
-                            $stage_group_title = 'round-robin' === $stage['type'] ? __('Groups', 'anwp-football-leagues') : __('Ties', 'anwp-football-leagues');
-
-                            echo '<div class="anwp-g-stage-wrap">>> <b>' . esc_html($stage['stage_title']) . '</b> | ';
-                            echo esc_html(empty($this->type_map[$stage['type']]) ? '' : $this->type_map[$stage['type']] );
-
-                            if ('round-robin' === $stage['type']) {
-                                $subtype = $stage['format_robin'];
-                                echo ' | ' . esc_html(empty($this->format_robin_map[$subtype]) ? '' : $this->format_robin_map[$subtype] );
-                            } elseif ('knockout' === $stage['type']) {
-                                $subtype = $stage['format_knockout'];
-                                echo ' | ' . esc_html(empty($this->format_knockout_map[$subtype]) ? '' : $this->format_knockout_map[$subtype] );
-                            }
-
-                            echo ' | ' . esc_html($stage_group_title) . ':&nbsp;' . (int) $stage['groups'] . ' | ';
-                            echo esc_html__('ID', 'anwp-football-leagues') . ':&nbsp;' . (int) $stage['id'] . ' | ';
-                            echo sprintf('<a href="%s">%s</a>', esc_url(admin_url('post.php?post=' . (int) $stage['id'] . '&action=edit')), esc_html__('edit', 'anwp-football-leagues'));
-                            echo '</div>';
-                        }
-                    } else {
-                        // check main stage is assigned
-                        if (!(int) get_post_meta($post_id, '_anwpfl_multistage_main', true)) {
-                            echo esc_html__('!!! Error: Main Stage in Multistage competition is not set.', 'anwp-football-leagues');
-                        }
-                    }
+                if ('round-robin' === $type) {
+                    $subtype = get_post_meta($post_id, '_anwpfl_format_robin', true);
+                    echo ' | ' . esc_html(empty($this->format_robin_map[$subtype]) ? '' : $this->format_robin_map[$subtype] );
+                } elseif ('knockout' === $type) {
+                    $subtype = get_post_meta($post_id, '_anwpfl_format_knockout', true);
+                    echo ' | ' . esc_html(empty($this->format_knockout_map[$subtype]) ? '' : $this->format_knockout_map[$subtype] );
                 }
 
-                break;
+                    // Get number of groups
+                $groups = json_decode(get_post_meta($post_id, '_anwpfl_groups', true));
+
+                if (is_array($groups)) {
+                    echo ' | ' . esc_html($group_title) . ':&nbsp;' . (int) count($groups);
+                }
+
+                echo ' | ' . esc_html__('ID', 'anwp-football-leagues') . ':&nbsp;' . (int) $post_id;
+            } else {
+
+                echo sprintf('<span class="anwp-g-label-like">%s</span>', esc_html__('Multiple', 'anwp-football-leagues'));
+
+                    // Render main stage
+                echo '<br><div class="anwp-g-stage-wrap">> <b>' . esc_html(get_post_meta($post_id, '_anwpfl_stage_title', true)) . '</b> | ';
+                echo esc_html(empty($this->type_map[$type]) ? '' : $this->type_map[$type] );
+
+                if ('round-robin' === $type) {
+                    $subtype = get_post_meta($post_id, '_anwpfl_format_robin', true);
+                    echo ' | ' . esc_html(empty($this->format_robin_map[$subtype]) ? '' : $this->format_robin_map[$subtype] );
+                } elseif ('knockout' === $type) {
+                    $subtype = get_post_meta($post_id, '_anwpfl_format_knockout', true);
+                    echo ' | ' . esc_html(empty($this->format_knockout_map[$subtype]) ? '' : $this->format_knockout_map[$subtype] );
+                }
+
+                    // Get number of groups
+                $groups = json_decode(get_post_meta($post_id, '_anwpfl_groups', true));
+
+                if (is_array($groups)) {
+                    echo ' | ' . esc_html($group_title) . ':&nbsp;' . (int) count($groups) . ' | ';
+                }
+
+                echo esc_html__('ID', 'anwp-football-leagues') . ':&nbsp;' . (int) $post_id . ' | ';
+
+                echo sprintf('<a href="%s">%s</a>', esc_url(admin_url('post.php?post=' . $post_id . '&action=edit')), esc_html__('edit', 'anwp-football-leagues'));
+
+                echo '</div>';
+                    // --- end of rendering main stage ---
+
+                if ('main' === $multistage) {
+                        // Get all secondary stages
+                    $stages = $this->get_secondary_competitions_list($post_id);
+
+                    foreach ($stages as $stage) {
+                        $stage_group_title = 'round-robin' === $stage['type'] ? __('Groups', 'anwp-football-leagues') : __('Ties', 'anwp-football-leagues');
+
+                        echo '<div class="anwp-g-stage-wrap">>> <b>' . esc_html($stage['stage_title']) . '</b> | ';
+                        echo esc_html(empty($this->type_map[$stage['type']]) ? '' : $this->type_map[$stage['type']] );
+
+                        if ('round-robin' === $stage['type']) {
+                            $subtype = $stage['format_robin'];
+                            echo ' | ' . esc_html(empty($this->format_robin_map[$subtype]) ? '' : $this->format_robin_map[$subtype] );
+                        } elseif ('knockout' === $stage['type']) {
+                            $subtype = $stage['format_knockout'];
+                            echo ' | ' . esc_html(empty($this->format_knockout_map[$subtype]) ? '' : $this->format_knockout_map[$subtype] );
+                        }
+
+                        echo ' | ' . esc_html($stage_group_title) . ':&nbsp;' . (int) $stage['groups'] . ' | ';
+                        echo esc_html__('ID', 'anwp-football-leagues') . ':&nbsp;' . (int) $stage['id'] . ' | ';
+                        echo sprintf('<a href="%s">%s</a>', esc_url(admin_url('post.php?post=' . (int) $stage['id'] . '&action=edit')), esc_html__('edit', 'anwp-football-leagues'));
+                        echo '</div>';
+                    }
+                } else {
+                        // check main stage is assigned
+                    if (!(int) get_post_meta($post_id, '_anwpfl_multistage_main', true)) {
+                        echo esc_html__('!!! Error: Main Stage in Multistage competition is not set.', 'anwp-football-leagues');
+                    }
+                }
+            }
+
+            break;
 
             case 'anwpfl_standings':
-                $multistage = get_post_meta($post_id, '_anwpfl_multistage', true);
-                $type = get_post_meta($post_id, '_anwpfl_type', true);
-                $standing_map = $this->get_competition_standings_map();
+            $multistage = get_post_meta($post_id, '_anwpfl_multistage', true);
+            $type = get_post_meta($post_id, '_anwpfl_type', true);
+            $standing_map = $this->get_competition_standings_map();
 
-                if (empty($standing_map)) {
+            if (empty($standing_map)) {
+                break;
+            }
+
+            if ('' === $multistage) {
+                if ('round-robin' !== $type) {
                     break;
                 }
 
-                if ('' === $multistage) {
-                    if ('round-robin' !== $type) {
-                        break;
-                    }
+                if (!empty($standing_map[$post_id])) {
+                    foreach ($standing_map[$post_id] as $standing_id => $standing_title) {
+                        $edit_link = admin_url('post.php?post=' . intval($standing_id) . '&action=edit');
 
+                        echo '<svg class="anwp-icon anwp-icon--octi" style="margin-bottom: -2px;"><use xlink:href="#icon-link-external"></use></svg>&nbsp;&nbsp;';
+                        echo '<a href="' . esc_url($edit_link) . '">' . esc_html($standing_title) . '</a><br>';
+                    }
+                }
+            } elseif ('main' === $multistage) {
+
+                if ('round-robin' === $type) {
                     if (!empty($standing_map[$post_id])) {
                         foreach ($standing_map[$post_id] as $standing_id => $standing_title) {
                             $edit_link = admin_url('post.php?post=' . intval($standing_id) . '&action=edit');
@@ -2549,44 +2562,33 @@ class AnWPFL_Competition extends CPT_Core {
                             echo '<a href="' . esc_url($edit_link) . '">' . esc_html($standing_title) . '</a><br>';
                         }
                     }
-                } elseif ('main' === $multistage) {
-
-                    if ('round-robin' === $type) {
-                        if (!empty($standing_map[$post_id])) {
-                            foreach ($standing_map[$post_id] as $standing_id => $standing_title) {
-                                $edit_link = admin_url('post.php?post=' . intval($standing_id) . '&action=edit');
-
-                                echo '<svg class="anwp-icon anwp-icon--octi" style="margin-bottom: -2px;"><use xlink:href="#icon-link-external"></use></svg>&nbsp;&nbsp;';
-                                echo '<a href="' . esc_url($edit_link) . '">' . esc_html($standing_title) . '</a><br>';
-                            }
-                        }
-                    }
+                }
 
                     // Get all secondary stages
-                    $stages = $this->get_secondary_competitions_list($post_id);
+                $stages = $this->get_secondary_competitions_list($post_id);
 
-                    foreach ($stages as $stage) {
-                        if ('round-robin' === $stage['type'] && !empty($standing_map[$stage['id']])) {
-                            foreach ($standing_map[$stage['id']] as $standing_id => $standing_title) {
-                                $edit_link = admin_url('post.php?post=' . intval($standing_id) . '&action=edit');
+                foreach ($stages as $stage) {
+                    if ('round-robin' === $stage['type'] && !empty($standing_map[$stage['id']])) {
+                        foreach ($standing_map[$stage['id']] as $standing_id => $standing_title) {
+                            $edit_link = admin_url('post.php?post=' . intval($standing_id) . '&action=edit');
 
-                                echo '<svg class="anwp-icon anwp-icon--octi" style="margin-bottom: -2px;"><use xlink:href="#icon-link-external"></use></svg>&nbsp;&nbsp;';
-                                echo '<a href="' . esc_url($edit_link) . '">' . esc_html($standing_title) . '</a><br>';
-                            }
+                            echo '<svg class="anwp-icon anwp-icon--octi" style="margin-bottom: -2px;"><use xlink:href="#icon-link-external"></use></svg>&nbsp;&nbsp;';
+                            echo '<a href="' . esc_url($edit_link) . '">' . esc_html($standing_title) . '</a><br>';
                         }
                     }
                 }
+            }
 
-                break;
+            break;
 
             case 'anwpfl_matches_qty':
-                echo empty($this->get_competition_matches_qty($post_id)) ? '0/0' : ( absint($this->get_competition_matches_qty($post_id)->finished) . '/' . absint($this->get_competition_matches_qty($post_id)->qty) );
+            echo empty($this->get_competition_matches_qty($post_id)) ? '0/0' : ( absint($this->get_competition_matches_qty($post_id)->finished) . '/' . absint($this->get_competition_matches_qty($post_id)->qty) );
 
-                break;
+            break;
 
             case 'competition_id':
-                echo (int) $post_id;
-                break;
+            echo (int) $post_id;
+            break;
         }
     }
 
@@ -2688,23 +2690,23 @@ class AnWPFL_Competition extends CPT_Core {
 
             // Get single stage games
             $options = $wpdb->get_results(
-                    "
-				SELECT competition_id, COUNT(*) as qty, SUM( finished ) as finished
-				FROM {$wpdb->prefix}anwpfl_matches
-				WHERE main_stage_id = 0 OR main_stage_id = competition_id
-				GROUP BY competition_id
-				",
-                    OBJECT_K
+                "
+                SELECT competition_id, COUNT(*) as qty, SUM( finished ) as finished
+                FROM {$wpdb->prefix}anwpfl_matches
+                WHERE main_stage_id = 0 OR main_stage_id = competition_id
+                GROUP BY competition_id
+                ",
+                OBJECT_K
             );
 
             // Get single stage games
             $games_qty_multistaged = $wpdb->get_results(
-                    "
-				SELECT main_stage_id, COUNT(*) as qty, SUM( finished ) as finished
-				FROM {$wpdb->prefix}anwpfl_matches
-				GROUP BY main_stage_id
-				",
-                    OBJECT_K
+                "
+                SELECT main_stage_id, COUNT(*) as qty, SUM( finished ) as finished
+                FROM {$wpdb->prefix}anwpfl_matches
+                GROUP BY main_stage_id
+                ",
+                OBJECT_K
             );
 
             foreach ($options as $competition_index => $competition_games) {
@@ -2797,17 +2799,17 @@ class AnWPFL_Competition extends CPT_Core {
     public function get_competition_list($args) {
 
         $args = (object) wp_parse_args(
-                        $args,
-                        [
-                            'league_ids' => '',
-                            'season_ids' => '',
-                            'include_ids' => '',
-                            'exclude_ids' => '',
-                            'group_by' => '',
-                            'display' => '',
-                            'show_logo' => 'yes',
-                            'show_flag' => 'big',
-                        ]
+            $args,
+            [
+                'league_ids' => '',
+                'season_ids' => '',
+                'include_ids' => '',
+                'exclude_ids' => '',
+                'group_by' => '',
+                'display' => '',
+                'show_logo' => 'yes',
+                'show_flag' => 'big',
+            ]
         );
 
         $filtered_competitions = [];
@@ -2860,9 +2862,9 @@ class AnWPFL_Competition extends CPT_Core {
           | Sorting
           |--------------------------------------------------------------------
          */
-        $competitions = wp_list_sort($filtered_competitions, 'title');
+          $competitions = wp_list_sort($filtered_competitions, 'title');
 
-        if (in_array($args->display, ['league', 'league_season'], true)) {
+          if (in_array($args->display, ['league', 'league_season'], true)) {
             $competitions = wp_list_sort($competitions, 'league');
         }
 
@@ -2872,12 +2874,12 @@ class AnWPFL_Competition extends CPT_Core {
           |--------------------------------------------------------------------
          */
         // Populate Object Cache
-        $competition_ids = wp_list_pluck($competitions, 'id');
+          $competition_ids = wp_list_pluck($competitions, 'id');
 
         // Get match links
-        $competition_posts = [];
+          $competition_posts = [];
 
-        $query_args = [
+          $query_args = [
             'include' => $competition_ids,
             'post_type' => 'anwp_competition',
             'cache_results' => false,
@@ -2897,7 +2899,7 @@ class AnWPFL_Competition extends CPT_Core {
           | Grouping
           |--------------------------------------------------------------------
          */
-        if ($args->group_by) {
+          if ($args->group_by) {
 
             $countries = [];
             foreach (array_unique(wp_list_pluck($competitions, 'country')) as $country_item) {
