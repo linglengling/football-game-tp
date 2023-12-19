@@ -1416,7 +1416,7 @@ class AnWPFL_Competition extends CPT_Core {
         foreach ($matches as $match_index => $match) {
             $customID = isset($matches_posts[$match->match_id]) ? $matches_posts[$match->match_id] : $match->match_id;
             $subURL = substr(esc_url(get_permalink($customID)), strlen(home_url('/blog')));
-            $mainURL = home_url('/') . get_option('wm_short_url') . $subURL;
+            $mainURL = site_url('/') . get_option('wm_short_url') . $subURL;
             $url = preg_replace('/([^:])(\/{2,})/', '$1/', $mainURL);
             $matches[$match_index]->permalink = $url;
         }
