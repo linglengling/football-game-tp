@@ -1416,7 +1416,17 @@ class AnWPFL_Competition extends CPT_Core {
         foreach ($matches as $match_index => $match) {
             $customID = isset($matches_posts[$match->match_id]) ? $matches_posts[$match->match_id] : $match->match_id;
             $subURL = substr(esc_url(get_permalink($customID)), strlen(home_url('/blog')));
-            $mainURL = site_url('/') . get_option('wm_short_url') . $subURL;
+
+            $current_lang = apply_filters( 'wpml_current_language', null );
+            $sub = '';
+            if($current_lang == 'vi'){
+                $sub = '/bong-da/';
+            }elseif($current_lang == 'pt-br'){
+                $sub = '/futebol/';
+            }else{
+                $sub = '/football/';
+            }
+            $mainURL = site_url('/') . $sub . $subURL;
             $url = preg_replace('/([^:])(\/{2,})/', '$1/', $mainURL);
             $matches[$match_index]->permalink = $url;
         }
