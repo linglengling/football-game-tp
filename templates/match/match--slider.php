@@ -197,7 +197,18 @@ if($translate->language == 'vi'){
 	?>
 
 	<div class="anwp-game-prediction">
-		<a href="<?php echo esc_url( $data->permalink ); ?>" class="anim-text-flow">Prediction</a>
+		<a href="<?php echo esc_url( $data->permalink ); ?>" class="anim-text-flow">
+			<span>P</span>
+			<span>r</span>
+			<span>e</span>
+			<span>d</span>
+			<span>i</span>
+			<span>c</span>
+			<span>t</span>
+			<span>i</span>
+			<span>o</span>
+			<span>n</span>
+		</a>
 		<div class="math-forecast__rate-container fl">
 			<div class="math-forecast__rate-item math-forecast__rate-item--middle">
 				<span class="math-forecast__rate-value"><?php echo $predictions['percent']['home'] ?></span>
