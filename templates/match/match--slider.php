@@ -184,18 +184,31 @@ if($translate->language == 'vi'){
 		</div>
 	<?php endif; ?>
 
+	<?php 
+
+	/*==================================================
+	>>>       PREDICTION     
+	==================================================*/
+	$predictions = [
+		'advice'     => get_post_meta( $data->match_id, '_anwpfl_prediction_advice', true ),
+		'percent'    => get_post_meta( $data->match_id, '_anwpfl_prediction_percent', true ),
+		'comparison' => get_post_meta( $data->match_id, '_anwpfl_prediction_comparison', true ),
+	];
+	?>
+	<h2>iok</h2>
+
 	<?php
 	if ( $kickoff_diff > 0 ) :
-		$label_style = '';
-		$value_style = '';
+		// $label_style = '';
+		// $value_style = '';
 
-		if ( absint( $data->label_size ) ) {
-			$label_style .= 'font-size: ' . absint( $data->label_size ) . 'px;';
-		}
+		// if ( absint( $data->label_size ) ) {
+		// 	$label_style .= 'font-size: ' . absint( $data->label_size ) . 'px;';
+		// }
 
-		if ( absint( $data->value_size ) ) {
-			$value_style .= 'font-size: ' . absint( $data->value_size ) . 'px;';
-		}
+		// if ( absint( $data->value_size ) ) {
+		// 	$value_style .= 'font-size: ' . absint( $data->value_size ) . 'px;';
+		// }
 		?>
 		<div class="anwp-text-center <?php echo esc_attr( 'widget' === $data->context ? 'py-2' : 'py-3' ); ?> anwp-fl-game-countdown anwp-fl-game-countdown--<?php echo esc_attr( $data->context ); ?> d-none"
 			data-game-datetime="<?php echo esc_attr( $countdown ); ?>">
@@ -205,11 +218,11 @@ if($translate->language == 'vi'){
 						<?php //echo esc_html( AnWPFL_Text::get_value( 'data__flip_countdown__days', esc_html_x( 'days', 'flip countdown', 'anwp-football-leagues' ) ) ); ?>
 						<?php echo $translate->translate('days') ?>
 					</div>
-					<div class="anwp-fl-game-countdown__value anwp-fl-game-countdown__value-days" style="<?php echo esc_html( $value_style ); ?>"></div>
+					<div class="anwp-fl-game-countdown__value anwp-fl-game-countdown__value-days"></div>
 				</div>
 				<div class="anwp-fl-game-countdown__separator"></div>
 				<div class="anwp-fl-game-countdown__item anwp-fl-game-countdown__hours">
-					<div class="anwp-fl-game-countdown__label" style="<?php echo esc_html( $label_style ); ?>">
+					<div class="anwp-fl-game-countdown__label">
 						<?php //echo esc_html( AnWPFL_Text::get_value( 'data__flip_countdown__hours', esc_html_x( 'hours', 'flip countdown', 'anwp-football-leagues' ) ) ); ?>
 						<?php echo $translate->translate('hours') ?>						
 					</div>
@@ -236,3 +249,6 @@ if($translate->language == 'vi'){
 	<?php endif; ?>
 	<a class="anwp-link-cover anwp-link-without-effects" href="<?php echo esc_url( $data->permalink ); ?>"></a>
 </div>
+<?php echo '<pre>';
+print_r($data);
+echo '</pre>'; ?>
