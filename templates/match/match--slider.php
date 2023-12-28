@@ -211,12 +211,15 @@ if($translate->language == 'vi'){
 		</a>
 		<div class="math-forecast__rate-container fl">
 			<div class="math-forecast__rate-item math-forecast__rate-item--middle">
+				<span class="math-forecast__rate-name">Home</span>
 				<span class="math-forecast__rate-value"><?php echo $predictions['percent']['home'] ?></span>
 			</div>
 			<div class="math-forecast__rate-item math-forecast__rate-item--lowest">
+				<span class="math-forecast__rate-name">Draw</span>
 				<span class="math-forecast__rate-value"><?php echo $predictions['percent']['draw'] ?></span>
 			</div>
 			<div class="math-forecast__rate-item math-forecast__rate-item--highest">
+				<span class="math-forecast__rate-name">Away</span>
 				<span class="math-forecast__rate-value"><?php echo $predictions['percent']['away'] ?></span>
 			</div>
 		</div>
